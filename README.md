@@ -8,12 +8,22 @@ This contains everything you need to run your app locally.
 
 View your app in AI Studio: https://ai.studio/apps/drive/14OH9K2M2BNegBBVsGRSC8cXc7fZCkaYl
 
+**Live Demo:** https://tagliala-labs.github.io/stk/
+
 ## Run Locally
 
-**Prerequisites:** Node.js
+**Prerequisites:** Node.js and pnpm
 
 1. Install dependencies:
-   `npm install`
+   `pnpm install`
 2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
 3. Run the app:
-   `npm run dev`
+   `pnpm run dev`
+
+## Deploy to GitHub Pages
+
+The app is automatically deployed to GitHub Pages when changes are pushed to the `main` branch.
+
+The deployment workflow can also be triggered manually from the Actions tab in GitHub.
+
+**Deployed URL:** https://tagliala-labs.github.io/stk/
