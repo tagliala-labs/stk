@@ -352,11 +352,11 @@ export default function App() {
   return (
     <div className="flex h-screen flex-col overflow-hidden bg-[#fafafa] transition-colors duration-200 lg:flex-row dark:bg-slate-950">
       {/* COLUMN 1: Settings */}
-      <aside className="flex w-full flex-col overflow-hidden border-b border-slate-200 bg-white shadow-sm transition-colors duration-200 lg:w-72 lg:border-b-0 lg:border-r dark:border-slate-800 dark:bg-slate-900">
+      <aside className="flex w-full flex-col overflow-hidden border-b border-slate-200 bg-white shadow-sm transition-colors duration-200 lg:w-72 lg:border-r lg:border-b-0 dark:border-slate-800 dark:bg-slate-900">
         <div className="p-4 pb-2 lg:p-6 lg:pb-2">
           <div className="mb-3 flex items-start justify-between lg:mb-4">
             <div>
-              <h1 className="text-2xl font-black leading-none tracking-tighter text-slate-900 italic lg:text-3xl dark:text-white">
+              <h1 className="text-2xl leading-none font-black tracking-tighter text-slate-900 italic lg:text-3xl dark:text-white">
                 {t.title}
                 <span className="text-indigo-600">.</span>
               </h1>
@@ -392,7 +392,7 @@ export default function App() {
             onUpload={(newOnes) => setPhotos([...photos, ...newOnes])}
             t={t}
           />
-          
+
           {/* Mobile Settings Toggle */}
           <button
             onClick={() => setShowMobileSettings(!showMobileSettings)}
@@ -402,11 +402,17 @@ export default function App() {
               <SettingsIcon size={12} />
               <span>{t.options}</span>
             </div>
-            <span className={`transition-transform ${showMobileSettings ? 'rotate-180' : ''}`}>▼</span>
+            <span
+              className={`transition-transform ${showMobileSettings ? 'rotate-180' : ''}`}
+            >
+              ▼
+            </span>
           </button>
         </div>
 
-        <div className={`custom-scrollbar space-y-6 overflow-y-auto p-4 pt-2 transition-all lg:flex-1 lg:block lg:p-6 lg:pt-2 ${showMobileSettings ? 'block' : 'hidden lg:block'}`}>
+        <div
+          className={`custom-scrollbar space-y-6 overflow-y-auto p-4 pt-2 transition-all lg:block lg:flex-1 lg:p-6 lg:pt-2 ${showMobileSettings ? 'block' : 'hidden lg:block'}`}
+        >
           <div className="space-y-4">
             <div className="flex items-center gap-2 border-b border-slate-100 pb-1 text-slate-400 dark:border-slate-800 dark:text-slate-600">
               <SettingsIcon size={12} />
@@ -585,7 +591,7 @@ export default function App() {
       </main>
 
       {/* COLUMN 3: Photo Management List */}
-      <aside className="flex w-full flex-col overflow-hidden border-t border-slate-200 bg-white shadow-sm transition-colors duration-200 lg:w-80 lg:border-l lg:border-t-0 dark:border-slate-800 dark:bg-slate-900">
+      <aside className="flex w-full flex-col overflow-hidden border-t border-slate-200 bg-white shadow-sm transition-colors duration-200 lg:w-80 lg:border-t-0 lg:border-l dark:border-slate-800 dark:bg-slate-900">
         <div className="flex items-center justify-between border-b border-slate-100 bg-slate-50/30 p-4 lg:p-6 dark:border-slate-800 dark:bg-slate-900/30">
           <div className="flex items-center gap-2">
             <ImageIcon
