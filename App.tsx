@@ -22,6 +22,7 @@ import {
   Sun,
   Moon,
   Github,
+  ChevronDown,
 } from 'lucide-react';
 
 // --- Localization ---
@@ -111,6 +112,8 @@ const FORMATS = {
   '16:9': { width: 1920, height: 1080, label: '16:9' },
   '9:16': { width: 1080, height: 1920, label: '9:16' },
 };
+
+const MOBILE_CANVAS_OFFSET = 300; // Offset for mobile canvas height calculation
 
 const getInitialLang = (): Language => {
   const browserLang = navigator.language.split('-')[0];
@@ -261,7 +264,7 @@ const CanvasPreview = forwardRef<
         ref={canvasRef}
         className="block h-auto max-w-full"
         style={{
-          maxHeight: 'min(calc(100vh - 300px), 600px)',
+          maxHeight: `min(calc(100vh - ${MOBILE_CANVAS_OFFSET}px), 600px)`,
           objectFit: 'contain',
         }}
       />
@@ -402,16 +405,17 @@ export default function App() {
               <SettingsIcon size={12} />
               <span>{t.options}</span>
             </div>
-            <span
+            <ChevronDown
+              size={12}
               className={`transition-transform ${showMobileSettings ? 'rotate-180' : ''}`}
-            >
-              ▼
-            </span>
+            />
           </button>
         </div>
 
         <div
-          className={`custom-scrollbar space-y-6 overflow-y-auto p-4 pt-2 transition-all lg:block lg:flex-1 lg:p-6 lg:pt-2 ${showMobileSettings ? 'block' : 'hidden lg:block'}`}
+          className={`custom-scrollbar space-y-6 overflow-y-auto p-4 pt-2 transition-all lg:block lg:flex-1 lg:p-6 lg:pt-2 ${
+            showMobileSettings ? 'block' : 'hidden lg:block'
+          }`}
         >
           <div className="space-y-4">
             <div className="flex items-center gap-2 border-b border-slate-100 pb-1 text-slate-400 dark:border-slate-800 dark:text-slate-600">
