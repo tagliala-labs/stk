@@ -21,6 +21,7 @@ import {
   Plus,
   Sun,
   Moon,
+  Github,
 } from 'lucide-react';
 
 // --- Localization ---
@@ -51,6 +52,7 @@ const translations = {
     images: 'Images',
     stackList: 'Stack Content',
     theme: 'Theme',
+    github: 'View on GitHub',
   },
   it: {
     title: 'STK.',
@@ -78,6 +80,7 @@ const translations = {
     images: 'Immagini',
     stackList: 'Contenuto Stack',
     theme: 'Tema',
+    github: 'Vedi su GitHub',
   },
 };
 
@@ -359,6 +362,15 @@ export default function App() {
               </p>
             </div>
             <div className="flex gap-2">
+              <a
+                href="https://github.com/tagliala-labs/stk"
+                target="_blank"
+                rel="noopener noreferrer"
+                title={t.github}
+                className="rounded-full border border-slate-200 bg-slate-50 p-2 text-slate-500 transition-colors hover:text-indigo-600 dark:border-slate-700 dark:bg-slate-800"
+              >
+                <Github size={12} />
+              </a>
               <button
                 onClick={toggleTheme}
                 className="rounded-full border border-slate-200 bg-slate-50 p-2 text-slate-500 transition-colors hover:text-indigo-600 dark:border-slate-700 dark:bg-slate-800"
