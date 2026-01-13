@@ -8,7 +8,8 @@ STK (Creative Stacker) is a React-based web application that allows users to cre
 - **Vite 6.2.0** as build tool and dev server
 - **Tailwind CSS** (via CDN) for styling
 - **Lucide React 0.460.0** for icons
-- **TypeScript 5.8.2** with strict mode disabled
+- **TypeScript 5.8.2**
+- **pnpm** as package manager
 
 ## Code Style and Conventions
 
@@ -134,16 +135,17 @@ STK (Creative Stacker) is a React-based web application that allows users to cre
 2. UI will automatically generate button in format selector grid
 
 ## Build and Development
-- Run dev server: `npm run dev` (starts on port 3000)
-- Build for production: `npm run build`
-- Preview production build: `npm run preview`
+- Run dev server: `pnpm run dev` (starts on port 3000)
+- Build for production: `pnpm run build`
+- Preview production build: `pnpm run preview`
+- Install dependencies: `pnpm install`
 - Environment variable: `GEMINI_API_KEY` in `.env.local` (optional, for AI features)
 
 ## File Organization
 - Main application: `App.tsx`
 - Entry point: `index.tsx`
-- Type definitions: `types.ts` (currently empty, types defined inline)
-- Components: `components/` directory (currently unused, components are inline)
+- Type definitions: `types.ts` (currently empty, types defined inline in `App.tsx`)
+- Components: `components/` directory (contains empty placeholder files; all components currently defined inline in `App.tsx`)
 - Build configuration: `vite.config.ts`
 - TypeScript configuration: `tsconfig.json`
 
