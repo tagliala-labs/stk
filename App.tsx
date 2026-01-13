@@ -39,6 +39,7 @@ const translations = {
     clear: 'Clear All',
     export: 'EXPORT JPG',
     warningHeight: 'Height exceeds limit of',
+    warningCrop: 'Image will be cropped to fit',
     emptyTitle: 'Start Stacking',
     emptyDesc: 'Drag and drop your photos to compose a vertical stack.',
     res: 'Resolution',
@@ -67,6 +68,7 @@ const translations = {
     clear: 'Svuota Tutto',
     export: 'ESPORTA JPG',
     warningHeight: "L'altezza supera il limite di",
+    warningCrop: "L'immagine sarà ritagliata",
     emptyTitle: 'Crea lo stack',
     emptyDesc: 'Trascina le foto per comporre il tuo stack verticale.',
     res: 'Risoluzione',
@@ -254,12 +256,12 @@ const CanvasPreview = forwardRef<
   }, [photos, settings, onHeightViolation]);
 
   return (
-    <div className="relative overflow-hidden rounded-sm border border-white/5 bg-black shadow-2xl ring-1 ring-black">
+    <div className="relative overflow-hidden rounded-sm border-4 border-indigo-500/30 bg-black shadow-2xl ring-1 ring-slate-200 dark:border-indigo-400/40 dark:ring-slate-700">
       <canvas
         ref={canvasRef}
         className="block h-auto max-w-full"
         style={{
-          maxHeight: 'calc(100vh - 200px)',
+          maxHeight: 'min(calc(100vh - 300px), 600px)',
           objectFit: 'contain',
         }}
       />
@@ -280,6 +282,7 @@ export default function App() {
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [isTooTall, setIsTooTall] = useState(false);
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
+  const [showMobileSettings, setShowMobileSettings] = useState(false);
 
   const [settings, setSettings] = useState<Settings>({
     backgroundColor: '#000000',
@@ -301,7 +304,7 @@ export default function App() {
   }, [isDark]);
 
   const handleExport = () => {
-    if (!canvasRef.current || isTooTall) return;
+    if (!canvasRef.current) return;
     const link = document.createElement('a');
     link.download = `stack-${settings.format.replace(':', '-')}-${Date.now()}.jpg`;
     link.href = canvasRef.current.toDataURL('image/jpeg', 0.95);
@@ -347,13 +350,13 @@ export default function App() {
   const handleDragEnd = () => setDraggedIndex(null);
 
   return (
-    <div className="flex h-screen flex-col overflow-hidden bg-[#fafafa] transition-colors duration-200 md:flex-row dark:bg-slate-950">
+    <div className="flex h-screen flex-col overflow-hidden bg-[#fafafa] transition-colors duration-200 lg:flex-row dark:bg-slate-950">
       {/* COLUMN 1: Settings */}
-      <aside className="flex w-full flex-col overflow-hidden border-r border-slate-200 bg-white shadow-sm transition-colors duration-200 md:w-72 dark:border-slate-800 dark:bg-slate-900">
-        <div className="p-6 pb-2">
-          <div className="mb-4 flex items-start justify-between">
+      <aside className="flex w-full flex-col overflow-hidden border-b border-slate-200 bg-white shadow-sm transition-colors duration-200 lg:w-72 lg:border-b-0 lg:border-r dark:border-slate-800 dark:bg-slate-900">
+        <div className="p-4 pb-2 lg:p-6 lg:pb-2">
+          <div className="mb-3 flex items-start justify-between lg:mb-4">
             <div>
-              <h1 className="text-3xl leading-none font-black tracking-tighter text-slate-900 italic dark:text-white">
+              <h1 className="text-2xl font-black leading-none tracking-tighter text-slate-900 italic lg:text-3xl dark:text-white">
                 {t.title}
                 <span className="text-indigo-600">.</span>
               </h1>
@@ -389,9 +392,21 @@ export default function App() {
             onUpload={(newOnes) => setPhotos([...photos, ...newOnes])}
             t={t}
           />
+          
+          {/* Mobile Settings Toggle */}
+          <button
+            onClick={() => setShowMobileSettings(!showMobileSettings)}
+            className="mt-3 flex w-full items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 px-4 py-2 text-[10px] font-bold text-slate-600 transition-colors hover:border-indigo-300 lg:hidden dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400"
+          >
+            <div className="flex items-center gap-2">
+              <SettingsIcon size={12} />
+              <span>{t.options}</span>
+            </div>
+            <span className={`transition-transform ${showMobileSettings ? 'rotate-180' : ''}`}>▼</span>
+          </button>
         </div>
 
-        <div className="custom-scrollbar flex-1 space-y-6 overflow-y-auto p-6 pt-2">
+        <div className={`custom-scrollbar space-y-6 overflow-y-auto p-4 pt-2 transition-all lg:flex-1 lg:block lg:p-6 lg:pt-2 ${showMobileSettings ? 'block' : 'hidden lg:block'}`}>
           <div className="space-y-4">
             <div className="flex items-center gap-2 border-b border-slate-100 pb-1 text-slate-400 dark:border-slate-800 dark:text-slate-600">
               <SettingsIcon size={12} />
@@ -504,12 +519,17 @@ export default function App() {
           </div>
         </div>
 
-        <div className="border-t border-slate-100 bg-slate-50/50 p-6 dark:border-slate-800 dark:bg-slate-900/50">
+        <div className="border-t border-slate-100 bg-slate-50/50 p-4 lg:p-6 dark:border-slate-800 dark:bg-slate-900/50">
+          {isTooTall && photos.length > 0 && (
+            <div className="mb-3 flex items-center gap-2 rounded-xl bg-amber-50 px-3 py-2 text-[10px] font-bold text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">
+              <AlertCircle size={12} /> {t.warningCrop}
+            </div>
+          )}
           <button
             onClick={handleExport}
-            disabled={photos.length === 0 || isTooTall}
+            disabled={photos.length === 0}
             className={`flex w-full items-center justify-center gap-3 rounded-3xl py-4 text-xs font-black transition-all active:scale-95 ${
-              photos.length === 0 || isTooTall
+              photos.length === 0
                 ? 'cursor-not-allowed border border-slate-300 bg-slate-200 text-slate-400 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-600'
                 : 'bg-indigo-600 text-white shadow-xl shadow-indigo-100 hover:bg-indigo-700 dark:shadow-none'
             }`}
@@ -520,9 +540,9 @@ export default function App() {
       </aside>
 
       {/* COLUMN 2: Canvas Preview */}
-      <main className="relative flex flex-1 flex-col items-center justify-center bg-[#f0f2f5] p-6 transition-colors duration-200 dark:bg-slate-950">
+      <main className="relative flex flex-1 flex-col items-center justify-center bg-[#f0f2f5] p-3 transition-colors duration-200 lg:p-6 dark:bg-slate-950">
         {isTooTall && (
-          <div className="absolute top-6 z-10 flex animate-pulse items-center gap-3 rounded-full bg-red-600 px-6 py-2.5 text-[10px] font-black text-white shadow-2xl">
+          <div className="absolute top-3 z-10 flex animate-pulse items-center gap-2 rounded-full bg-red-600 px-4 py-2 text-[10px] font-black text-white shadow-2xl lg:top-6 lg:gap-3 lg:px-6 lg:py-2.5">
             <AlertCircle size={14} /> {t.warningHeight}{' '}
             {FORMATS[settings.format].height}px!
           </div>
@@ -551,19 +571,22 @@ export default function App() {
           </div>
         )}
 
-        <div className="absolute bottom-6 flex gap-6 text-[10px] font-black tracking-[0.3em] text-slate-400 uppercase dark:text-slate-600">
+        <div className="absolute bottom-3 flex gap-3 text-[9px] font-black tracking-[0.2em] text-slate-400 uppercase lg:bottom-6 lg:gap-6 lg:text-[10px] lg:tracking-[0.3em] dark:text-slate-600">
           <span>{FORMATS[settings.format].label}</span>
           <span className="opacity-20">•</span>
-          <span>
+          <span className="hidden sm:inline">
             {t.res}: {FORMATS[settings.format].width} x{' '}
             {FORMATS[settings.format].height}
+          </span>
+          <span className="sm:hidden">
+            {FORMATS[settings.format].width} x {FORMATS[settings.format].height}
           </span>
         </div>
       </main>
 
       {/* COLUMN 3: Photo Management List */}
-      <aside className="flex w-full flex-col overflow-hidden border-l border-slate-200 bg-white shadow-sm transition-colors duration-200 md:w-80 dark:border-slate-800 dark:bg-slate-900">
-        <div className="flex items-center justify-between border-b border-slate-100 bg-slate-50/30 p-6 dark:border-slate-800 dark:bg-slate-900/30">
+      <aside className="flex w-full flex-col overflow-hidden border-t border-slate-200 bg-white shadow-sm transition-colors duration-200 lg:w-80 lg:border-l lg:border-t-0 dark:border-slate-800 dark:bg-slate-900">
+        <div className="flex items-center justify-between border-b border-slate-100 bg-slate-50/30 p-4 lg:p-6 dark:border-slate-800 dark:bg-slate-900/30">
           <div className="flex items-center gap-2">
             <ImageIcon
               size={14}
