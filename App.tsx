@@ -344,17 +344,17 @@ export default function App() {
   const handleDragEnd = () => setDraggedIndex(null);
 
   return (
-    <div className="flex h-screen flex-col overflow-hidden bg-[#fafafa] transition-colors duration-200 md:flex-row dark:bg-slate-950">
+    <div className="flex h-screen flex-col overflow-hidden bg-[#fafafa] transition-colors duration-200 dark:bg-slate-950 md:flex-row">
       {/* COLUMN 1: Settings */}
-      <aside className="flex w-full flex-col overflow-hidden border-r border-slate-200 bg-white shadow-sm transition-colors duration-200 md:w-72 dark:border-slate-800 dark:bg-slate-900">
+      <aside className="flex w-full flex-col overflow-hidden border-r border-slate-200 bg-white shadow-sm transition-colors duration-200 dark:border-slate-800 dark:bg-slate-900 md:w-72">
         <div className="p-6 pb-2">
           <div className="mb-4 flex items-start justify-between">
             <div>
-              <h1 className="text-3xl leading-none font-black tracking-tighter text-slate-900 italic dark:text-white">
+              <h1 className="text-3xl font-black italic leading-none tracking-tighter text-slate-900 dark:text-white">
                 {t.title}
                 <span className="text-indigo-600">.</span>
               </h1>
-              <p className="mt-1 text-[10px] font-bold tracking-[0.2em] text-slate-400 uppercase dark:text-slate-500">
+              <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500">
                 {t.subtitle}
               </p>
             </div>
@@ -383,14 +383,14 @@ export default function App() {
           <div className="space-y-4">
             <div className="flex items-center gap-2 border-b border-slate-100 pb-1 text-slate-400 dark:border-slate-800 dark:text-slate-600">
               <SettingsIcon size={12} />
-              <h2 className="text-[10px] font-bold tracking-widest uppercase">
+              <h2 className="text-[10px] font-bold uppercase tracking-widest">
                 {t.options}
               </h2>
             </div>
 
             <div className="space-y-4">
               <div className="space-y-2">
-                <label className="text-[10px] font-black tracking-wider text-slate-400 uppercase dark:text-slate-500">
+                <label className="text-[10px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500">
                   {t.format}
                 </label>
                 <div className="grid grid-cols-3 gap-1.5">
@@ -413,7 +413,7 @@ export default function App() {
               </div>
 
               <div className="space-y-2">
-                <label className="text-[10px] font-black tracking-wider text-slate-400 uppercase dark:text-slate-500">
+                <label className="text-[10px] font-black uppercase tracking-wider text-slate-400 dark:text-slate-500">
                   {t.bgColor}
                 </label>
                 <div className="flex items-center gap-2">
@@ -446,7 +446,7 @@ export default function App() {
               </div>
 
               <div className="space-y-2">
-                <div className="flex justify-between text-[10px] font-black text-slate-400 uppercase dark:text-slate-500">
+                <div className="flex justify-between text-[10px] font-black uppercase text-slate-400 dark:text-slate-500">
                   <span>{t.spacing}</span>
                   <span className="font-mono font-bold text-indigo-600">
                     {settings.spacing}px
@@ -468,7 +468,7 @@ export default function App() {
               </div>
 
               <div className="space-y-2">
-                <div className="flex justify-between text-[10px] font-black text-slate-400 uppercase dark:text-slate-500">
+                <div className="flex justify-between text-[10px] font-black uppercase text-slate-400 dark:text-slate-500">
                   <span>{t.padding}</span>
                   <span className="font-mono font-bold text-indigo-600">
                     {settings.padding}px
@@ -539,7 +539,7 @@ export default function App() {
           </div>
         )}
 
-        <div className="absolute bottom-6 flex gap-6 text-[10px] font-black tracking-[0.3em] text-slate-400 uppercase dark:text-slate-600">
+        <div className="absolute bottom-6 flex gap-6 text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 dark:text-slate-600">
           <span>{FORMATS[settings.format].label}</span>
           <span className="opacity-20">•</span>
           <span>
@@ -550,21 +550,21 @@ export default function App() {
       </main>
 
       {/* COLUMN 3: Photo Management List */}
-      <aside className="flex w-full flex-col overflow-hidden border-l border-slate-200 bg-white shadow-sm transition-colors duration-200 md:w-80 dark:border-slate-800 dark:bg-slate-900">
+      <aside className="flex w-full flex-col overflow-hidden border-l border-slate-200 bg-white shadow-sm transition-colors duration-200 dark:border-slate-800 dark:bg-slate-900 md:w-80">
         <div className="flex items-center justify-between border-b border-slate-100 bg-slate-50/30 p-6 dark:border-slate-800 dark:bg-slate-900/30">
           <div className="flex items-center gap-2">
             <ImageIcon
               size={14}
               className="text-slate-400 dark:text-slate-600"
             />
-            <h3 className="text-[10px] font-black tracking-widest text-slate-900 uppercase dark:text-slate-200">
+            <h3 className="text-[10px] font-black uppercase tracking-widest text-slate-900 dark:text-slate-200">
               {t.stackList} ({photos.length})
             </h3>
           </div>
           {photos.length > 1 && (
             <button
               onClick={reverseOrder}
-              className="flex items-center gap-1.5 text-[10px] font-black text-indigo-600 uppercase hover:text-indigo-700"
+              className="flex items-center gap-1.5 text-[10px] font-black uppercase text-indigo-600 hover:text-indigo-700"
             >
               <ArrowUpDown size={12} />
               {t.reverse}
@@ -592,7 +592,7 @@ export default function App() {
 
               <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-xl border border-slate-100 bg-slate-100 shadow-inner dark:border-slate-700 dark:bg-slate-900">
                 <img src={p.preview} className="h-full w-full object-cover" />
-                <div className="absolute top-0 left-0 rounded-br-lg bg-indigo-600 px-1.5 py-0.5 text-[8px] font-black text-white">
+                <div className="absolute left-0 top-0 rounded-br-lg bg-indigo-600 px-1.5 py-0.5 text-[8px] font-black text-white">
                   {idx + 1}
                 </div>
               </div>
@@ -633,7 +633,7 @@ export default function App() {
           <div className="border-t border-slate-100 p-4 dark:border-slate-800">
             <button
               onClick={() => setPhotos([])}
-              className="w-full rounded-xl py-2 text-[10px] font-black tracking-widest text-red-400 uppercase transition-colors hover:bg-red-50/50 hover:text-red-600 dark:text-red-500 dark:hover:bg-red-900/20"
+              className="w-full rounded-xl py-2 text-[10px] font-black uppercase tracking-widest text-red-400 transition-colors hover:bg-red-50/50 hover:text-red-600 dark:text-red-500 dark:hover:bg-red-900/20"
             >
               {t.clear}
             </button>

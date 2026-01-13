@@ -2,65 +2,9 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>STK. - Multi-Format Stacker</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        darkMode: 'class',
-      };
-    </script>
-    <style>
-      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap');
-      body {
-        font-family: 'Inter', sans-serif;
-        margin: 0;
-        overflow: hidden;
-      }
-      input[type='range'] {
-        -webkit-appearance: none;
-        background: transparent;
-      }
-      input[type='range']::-webkit-slider-thumb {
-        -webkit-appearance: none;
-        height: 18px;
-        width: 18px;
-        border-radius: 50%;
-        background: #4f46e5;
-        cursor: pointer;
-        box-shadow: 0 0 10px rgba(79, 70, 229, 0.2);
-        margin-top: -6px;
-      }
-      input[type='range']::-webkit-slider-runnable-track {
-        width: 100%;
-        height: 6px;
-        cursor: pointer;
-        background: #e2e8f0;
-        border-radius: 3px;
-      }
-      .dark input[type='range']::-webkit-slider-runnable-track {
-        background: #334155;
-      }
-      .custom-scrollbar::-webkit-scrollbar {
-        width: 6px;
-      }
-      .custom-scrollbar::-webkit-scrollbar-track {
-        background: transparent;
-      }
-      .custom-scrollbar::-webkit-scrollbar-thumb {
-        background: #e2e8f0;
-        border-radius: 10px;
-      }
-      .dark .custom-scrollbar::-webkit-scrollbar-thumb {
-        background: #334155;
-      }
-      .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-        background: #cbd5e1;
-      }
-      .dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-        background: #475569;
-      }
-    </style>
     <script>
       // Initialize theme to avoid flash
       if (
@@ -86,11 +30,9 @@
         }
       }
     </script>
-    <link rel="stylesheet" href="/index.css" />
   </head>
   <body class="bg-white transition-colors duration-200 dark:bg-slate-950">
     <div id="root"></div>
-    <script type="module" src="index.tsx"></script>
     <script type="module" src="/index.tsx"></script>
   </body>
 </html>
