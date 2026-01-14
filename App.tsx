@@ -590,7 +590,7 @@ export default function App() {
             )}
 
             {photos.length > 0 ? (
-              <div className="relative mb-2 flex-1 overflow-hidden rounded-lg">
+              <div className="relative mb-2 flex flex-1 items-center justify-center overflow-hidden rounded-lg">
                 <CanvasPreview
                   photos={photos}
                   settings={settings}
