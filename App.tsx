@@ -391,25 +391,39 @@ export default function App() {
               </button>
             </div>
           </div>
-          <ImageUploader
-            onUpload={(newOnes) => setPhotos([...photos, ...newOnes])}
-            t={t}
-          />
 
-          {/* Mobile Settings Toggle */}
-          <button
-            onClick={() => setShowMobileSettings(!showMobileSettings)}
-            className="mt-3 flex w-full items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 px-4 py-2 text-[10px] font-bold text-slate-600 transition-colors hover:border-indigo-300 lg:hidden dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400"
-          >
-            <div className="flex items-center gap-2">
-              <SettingsIcon size={12} />
-              <span>{t.options}</span>
+          {/* Mobile: Side-by-side Add Photos and Options buttons */}
+          <div className="flex gap-2 lg:hidden">
+            <div className="w-1/2">
+              <ImageUploader
+                onUpload={(newOnes) => setPhotos([...photos, ...newOnes])}
+                t={t}
+              />
             </div>
-            <ChevronDown
-              size={12}
-              className={`transition-transform ${showMobileSettings ? 'rotate-180' : ''}`}
+            <button
+              onClick={() => setShowMobileSettings(!showMobileSettings)}
+              className="flex w-1/2 flex-col items-center justify-center rounded-3xl border-2 border-dashed border-slate-200 p-5 text-center transition-all hover:border-indigo-400 hover:bg-slate-50 dark:border-slate-800 dark:hover:border-indigo-500 dark:hover:bg-slate-800/50"
+            >
+              <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-2xl bg-slate-100 text-slate-400 transition-transform hover:scale-110 hover:bg-indigo-100 hover:text-indigo-500 dark:bg-slate-800 dark:hover:bg-indigo-900/50">
+                <SettingsIcon size={20} />
+              </div>
+              <p className="text-[11px] font-bold text-slate-700 dark:text-slate-300">
+                {t.options}
+              </p>
+              <ChevronDown
+                size={12}
+                className={`mt-1 text-slate-400 transition-transform ${showMobileSettings ? 'rotate-180' : ''}`}
+              />
+            </button>
+          </div>
+
+          {/* Desktop: Full width Add Photos */}
+          <div className="hidden lg:block">
+            <ImageUploader
+              onUpload={(newOnes) => setPhotos([...photos, ...newOnes])}
+              t={t}
             />
-          </button>
+          </div>
         </div>
 
         <div
@@ -552,18 +566,18 @@ export default function App() {
 
       {/* MOBILE: Combined Canvas and Photo List - Desktop: Canvas Only */}
       <main className="relative flex flex-1 flex-col overflow-hidden bg-[#f0f2f5] transition-colors duration-200 lg:flex-row lg:items-center lg:justify-center lg:p-6 dark:bg-slate-950">
-        {/* Mobile Two Column Layout */}
-        <div className="flex h-full flex-row gap-2 p-2 lg:hidden">
-          {/* Left Column: Canvas + Export */}
-          <div className="flex flex-1 flex-col">
+        {/* Mobile Layout - Full Width */}
+        <div className="flex h-full w-full flex-col p-3 lg:hidden">
+          {/* Canvas Preview */}
+          <div className="mb-3 flex-shrink-0">
             {isTooTall && (
-              <div className="mb-2 flex items-center gap-1.5 rounded-xl bg-red-600 px-2 py-1.5 text-[8px] font-black text-white shadow-lg">
-                <AlertCircle size={10} /> {t.warningCrop}
+              <div className="mb-2 flex items-center gap-1.5 rounded-xl bg-red-600 px-3 py-2 text-[9px] font-black text-white shadow-lg">
+                <AlertCircle size={12} /> {t.warningCrop}
               </div>
             )}
 
             {photos.length > 0 ? (
-              <div className="relative mb-2 flex-1 overflow-hidden rounded-lg">
+              <div className="relative overflow-hidden rounded-2xl shadow-xl">
                 <CanvasPreview
                   photos={photos}
                   settings={settings}
@@ -572,36 +586,38 @@ export default function App() {
                 />
               </div>
             ) : (
-              <div className="mb-2 flex flex-1 flex-col items-center justify-center rounded-lg border border-slate-200 bg-white p-4 text-center dark:border-slate-800 dark:bg-slate-900">
-                <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-2xl border border-slate-100 bg-slate-50 text-slate-200 dark:border-slate-800 dark:bg-slate-800 dark:text-slate-700">
-                  <Layout size={24} />
+              <div className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 bg-white p-8 text-center dark:border-slate-800 dark:bg-slate-900">
+                <div className="mb-3 flex h-14 w-14 items-center justify-center rounded-2xl border border-slate-100 bg-slate-50 text-slate-200 dark:border-slate-800 dark:bg-slate-800 dark:text-slate-700">
+                  <Layout size={28} />
                 </div>
-                <h3 className="text-xs font-black text-slate-800 dark:text-slate-200">
+                <h3 className="text-sm font-black text-slate-800 dark:text-slate-200">
                   {t.emptyTitle}
                 </h3>
-                <p className="mt-1 text-[9px] leading-relaxed text-slate-400 dark:text-slate-500">
+                <p className="mt-1 text-[10px] leading-relaxed text-slate-400 dark:text-slate-500">
                   {t.emptyDesc}
                 </p>
               </div>
             )}
-
-            <button
-              onClick={handleExport}
-              disabled={photos.length === 0}
-              className={`flex w-full items-center justify-center gap-2 rounded-2xl py-3 text-[10px] font-black transition-all active:scale-95 ${
-                photos.length === 0
-                  ? 'cursor-not-allowed border border-slate-300 bg-slate-200 text-slate-400 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-600'
-                  : 'bg-indigo-600 text-white shadow-lg hover:bg-indigo-700'
-              }`}
-            >
-              <Download size={14} /> {t.export}
-            </button>
           </div>
 
-          {/* Right Column: Thumbnails */}
-          <div className="flex w-24 flex-col gap-2 overflow-y-auto rounded-lg bg-white p-2 dark:bg-slate-900">
-            {photos.length > 0 ? (
-              <>
+          {/* Photo List - Horizontal Scroll */}
+          {photos.length > 0 && (
+            <div className="mb-3 flex-shrink-0">
+              <div className="mb-2 flex items-center justify-between">
+                <p className="text-[10px] font-black tracking-wider text-slate-400 uppercase dark:text-slate-600">
+                  {photos.length} {photos.length === 1 ? t.image : t.images}
+                </p>
+                {photos.length > 1 && (
+                  <button
+                    onClick={reverseOrder}
+                    className="flex items-center gap-1 rounded-lg bg-slate-100 px-2 py-1 text-[9px] font-black text-indigo-600 transition-colors hover:bg-indigo-50 dark:bg-slate-800 dark:text-indigo-400 dark:hover:bg-indigo-900/30"
+                  >
+                    <ArrowUpDown size={10} />
+                    {t.reverse}
+                  </button>
+                )}
+              </div>
+              <div className="flex gap-2 overflow-x-auto pb-2">
                 {photos.map((p, idx) => (
                   <div
                     key={p.id}
@@ -609,53 +625,53 @@ export default function App() {
                     onDragStart={() => handleDragStart(idx)}
                     onDragOver={(e) => handleDragOver(e, idx)}
                     onDragEnd={handleDragEnd}
-                    className={`group relative cursor-grab rounded-lg border transition-all active:cursor-grabbing ${
+                    className={`relative flex-shrink-0 cursor-grab rounded-xl border-2 bg-white p-1.5 transition-all active:cursor-grabbing dark:bg-slate-800 ${
                       draggedIndex === idx
-                        ? 'scale-95 border-indigo-500 opacity-40'
-                        : 'border-slate-200 hover:border-indigo-300 dark:border-slate-700 dark:hover:border-indigo-500'
+                        ? 'scale-95 border-indigo-500 opacity-50'
+                        : 'border-slate-200 dark:border-slate-700'
                     }`}
+                    style={{ width: '100px' }}
                   >
-                    <div className="relative aspect-square overflow-hidden rounded-lg bg-slate-100 dark:bg-slate-800">
+                    <div className="relative aspect-square overflow-hidden rounded-lg bg-slate-100 dark:bg-slate-900">
                       <img
                         src={p.preview}
                         className="h-full w-full object-cover"
                         alt={`Photo ${idx + 1}`}
                       />
-                      <div className="absolute top-0 left-0 rounded-br-md bg-indigo-600 px-1 py-0.5 text-[8px] font-black text-white">
+                      <div className="absolute top-1 left-1 rounded-md bg-indigo-600 px-1.5 py-0.5 text-[9px] font-black text-white shadow-sm">
                         {idx + 1}
                       </div>
-                      <div className="absolute inset-0 flex items-center justify-center bg-slate-900/0 transition-colors group-hover:bg-slate-900/50">
+                      <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-b from-transparent to-slate-900/30">
                         <GripVertical
-                          size={16}
-                          className="text-white opacity-0 transition-opacity group-hover:opacity-100"
+                          size={20}
+                          className="text-white opacity-60"
                         />
                       </div>
                     </div>
                     <button
                       onClick={() => removePhoto(p.id)}
-                      className="absolute -top-1 -right-1 rounded-full bg-red-500 p-0.5 text-white opacity-0 shadow-md transition-opacity group-hover:opacity-100 hover:bg-red-600"
+                      className="absolute -top-1.5 -right-1.5 rounded-full bg-red-500 p-1.5 text-white shadow-lg transition-transform hover:scale-110 hover:bg-red-600 active:scale-95"
                     >
-                      <Trash2 size={10} />
+                      <Trash2 size={12} />
                     </button>
                   </div>
                 ))}
-                {photos.length > 1 && (
-                  <button
-                    onClick={reverseOrder}
-                    className="mt-1 flex items-center justify-center gap-1 rounded-lg bg-slate-100 py-2 text-[8px] font-black text-indigo-600 transition-colors hover:bg-indigo-50 dark:bg-slate-800 dark:hover:bg-indigo-900/30"
-                  >
-                    <ArrowUpDown size={10} />
-                  </button>
-                )}
-              </>
-            ) : (
-              <div className="flex h-full items-center justify-center">
-                <p className="text-center text-[8px] font-bold text-slate-400 dark:text-slate-600">
-                  {t.stackList}
-                </p>
               </div>
-            )}
-          </div>
+            </div>
+          )}
+
+          {/* Export Button */}
+          <button
+            onClick={handleExport}
+            disabled={photos.length === 0}
+            className={`flex w-full items-center justify-center gap-2 rounded-2xl py-4 text-xs font-black transition-all active:scale-95 ${
+              photos.length === 0
+                ? 'cursor-not-allowed border-2 border-slate-300 bg-slate-200 text-slate-400 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-600'
+                : 'bg-indigo-600 text-white shadow-xl hover:bg-indigo-700'
+            }`}
+          >
+            <Download size={16} /> {t.export}
+          </button>
         </div>
 
         {/* Desktop Canvas View */}
