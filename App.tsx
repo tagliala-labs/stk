@@ -31,6 +31,7 @@ const translations = {
     title: 'STK.',
     subtitle: 'Creative Stacker',
     addPhoto: 'Add Photos',
+    addImage: 'Add Image',
     dragDrop: 'Drag or click',
     options: 'Options',
     format: 'Canvas Format',
@@ -60,6 +61,7 @@ const translations = {
     title: 'STK.',
     subtitle: 'Creative Stacker',
     addPhoto: 'Aggiungi Foto',
+    addImage: 'Aggiungi Immagine',
     dragDrop: 'Trascina o clicca',
     options: 'Opzioni',
     format: 'Formato Tela',
@@ -125,7 +127,8 @@ const getInitialLang = (): Language => {
 const ImageUploader: React.FC<{
   onUpload: (photos: Photo[]) => void;
   t: any;
-}> = ({ onUpload, t }) => {
+  compact?: boolean;
+}> = ({ onUpload, t, compact = false }) => {
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -168,10 +171,16 @@ const ImageUploader: React.FC<{
         processFiles(e.dataTransfer.files);
       }}
       onClick={() => fileInputRef.current?.click()}
-      className={`group relative flex cursor-pointer flex-col items-center justify-center rounded-3xl border-2 border-dashed p-5 text-center transition-all duration-300 ${
-        isDragging
+      className={`group relative flex cursor-pointer ${
+        compact
+          ? 'flex-row items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-2.5 transition-colors hover:border-indigo-300 dark:border-slate-700 dark:bg-slate-800'
+          : 'flex-col items-center justify-center rounded-3xl border-2 border-dashed p-5 text-center transition-all duration-300'
+      } ${
+        !compact && isDragging
           ? 'border-indigo-500 bg-indigo-50/50 dark:bg-indigo-900/20'
-          : 'border-slate-200 hover:border-indigo-400 hover:bg-slate-50 dark:border-slate-800 dark:hover:border-indigo-500 dark:hover:bg-slate-800/50'
+          : !compact
+            ? 'border-slate-200 hover:border-indigo-400 hover:bg-slate-50 dark:border-slate-800 dark:hover:border-indigo-500 dark:hover:bg-slate-800/50'
+            : ''
       }`}
     >
       <input
@@ -182,14 +191,25 @@ const ImageUploader: React.FC<{
         ref={fileInputRef}
         onChange={(e) => processFiles(e.target.files)}
       />
-      <div
-        className={`mb-2 flex h-10 w-10 items-center justify-center rounded-2xl transition-transform group-hover:scale-110 ${isDragging ? 'bg-indigo-500 text-white' : 'bg-slate-100 text-slate-400 group-hover:bg-indigo-100 group-hover:text-indigo-500 dark:bg-slate-800 dark:group-hover:bg-indigo-900/50'}`}
-      >
-        <Plus size={20} />
-      </div>
-      <p className="text-[11px] font-bold text-slate-700 dark:text-slate-300">
-        {t.addPhoto}
-      </p>
+      {compact ? (
+        <>
+          <Plus size={14} className="text-slate-600 dark:text-slate-400" />
+          <span className="text-[10px] font-bold text-slate-600 dark:text-slate-400">
+            {t.addImage}
+          </span>
+        </>
+      ) : (
+        <>
+          <div
+            className={`mb-2 flex h-10 w-10 items-center justify-center rounded-2xl transition-transform group-hover:scale-110 ${isDragging ? 'bg-indigo-500 text-white' : 'bg-slate-100 text-slate-400 group-hover:bg-indigo-100 group-hover:text-indigo-500 dark:bg-slate-800 dark:group-hover:bg-indigo-900/50'}`}
+          >
+            <Plus size={20} />
+          </div>
+          <p className="text-[11px] font-bold text-slate-700 dark:text-slate-300">
+            {t.addPhoto}
+          </p>
+        </>
+      )}
     </div>
   );
 };
@@ -259,15 +279,8 @@ const CanvasPreview = forwardRef<
   }, [photos, settings, onHeightViolation]);
 
   return (
-    <div className="relative overflow-hidden rounded-sm border-4 border-indigo-400/80 bg-black dark:border-indigo-600/80">
-      <canvas
-        ref={canvasRef}
-        className="block h-auto max-w-full"
-        style={{
-          maxHeight: `min(calc(100vh - ${MOBILE_CANVAS_OFFSET}px), 600px)`,
-          objectFit: 'contain',
-        }}
-      />
+    <div className="relative h-full overflow-hidden rounded-sm border-4 border-indigo-400/80 bg-black dark:border-indigo-600/80">
+      <canvas ref={canvasRef} className="block h-full w-full object-contain" />
     </div>
   );
 });
@@ -391,25 +404,35 @@ export default function App() {
               </button>
             </div>
           </div>
-          <ImageUploader
-            onUpload={(newOnes) => setPhotos([...photos, ...newOnes])}
-            t={t}
-          />
-
-          {/* Mobile Settings Toggle */}
-          <button
-            onClick={() => setShowMobileSettings(!showMobileSettings)}
-            className="mt-3 flex w-full items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 px-4 py-2 text-[10px] font-bold text-slate-600 transition-colors hover:border-indigo-300 lg:hidden dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400"
-          >
-            <div className="flex items-center gap-2">
-              <SettingsIcon size={12} />
-              <span>{t.options}</span>
-            </div>
-            <ChevronDown
-              size={12}
-              className={`transition-transform ${showMobileSettings ? 'rotate-180' : ''}`}
+          {/* Desktop: Full ImageUploader */}
+          <div className="hidden lg:block">
+            <ImageUploader
+              onUpload={(newOnes) => setPhotos([...photos, ...newOnes])}
+              t={t}
             />
-          </button>
+          </div>
+
+          {/* Mobile: Side-by-side Add Image and Options */}
+          <div className="flex gap-2 lg:hidden">
+            <div className="flex-1">
+              <ImageUploader
+                onUpload={(newOnes) => setPhotos([...photos, ...newOnes])}
+                t={t}
+                compact
+              />
+            </div>
+            <button
+              onClick={() => setShowMobileSettings(!showMobileSettings)}
+              className="flex items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-[10px] font-bold text-slate-600 transition-colors hover:border-indigo-300 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400"
+            >
+              <SettingsIcon size={14} />
+              <span>{t.options}</span>
+              <ChevronDown
+                size={12}
+                className={`transition-transform ${showMobileSettings ? 'rotate-180' : ''}`}
+              />
+            </button>
+          </div>
         </div>
 
         <div
