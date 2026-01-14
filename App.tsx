@@ -529,7 +529,8 @@ export default function App() {
           </div>
         </div>
 
-        <div className="border-t border-slate-100 bg-slate-50/50 p-4 lg:p-6 dark:border-slate-800 dark:bg-slate-900/50">
+        {/* Desktop Export Button - Hidden on Mobile */}
+        <div className="hidden border-t border-slate-100 bg-slate-50/50 p-4 lg:block lg:p-6 dark:border-slate-800 dark:bg-slate-900/50">
           {isTooTall && photos.length > 0 && (
             <div className="mb-3 flex items-center gap-2 rounded-xl bg-amber-50 px-3 py-2 text-[10px] font-bold text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">
               <AlertCircle size={12} /> {t.warningCrop}
@@ -549,54 +550,160 @@ export default function App() {
         </div>
       </aside>
 
-      {/* COLUMN 2: Canvas Preview */}
-      <main className="relative flex flex-1 flex-col items-center justify-center bg-[#f0f2f5] p-3 transition-colors duration-200 lg:p-6 dark:bg-slate-950">
-        {isTooTall && (
-          <div className="absolute top-3 z-10 flex animate-pulse items-center gap-2 rounded-full bg-red-600 px-4 py-2 text-[10px] font-black text-white shadow-2xl lg:top-6 lg:gap-3 lg:px-6 lg:py-2.5">
-            <AlertCircle size={14} /> {t.warningHeight}{' '}
-            {FORMATS[settings.format].height}px!
-          </div>
-        )}
+      {/* MOBILE: Combined Canvas and Photo List - Desktop: Canvas Only */}
+      <main className="relative flex flex-1 flex-col overflow-hidden bg-[#f0f2f5] transition-colors duration-200 lg:flex-row lg:items-center lg:justify-center lg:p-6 dark:bg-slate-950">
+        {/* Mobile Two Column Layout */}
+        <div className="flex h-full flex-row gap-2 p-2 lg:hidden">
+          {/* Left Column: Canvas + Export */}
+          <div className="flex flex-1 flex-col">
+            {isTooTall && (
+              <div className="mb-2 flex items-center gap-1.5 rounded-xl bg-red-600 px-2 py-1.5 text-[8px] font-black text-white shadow-lg">
+                <AlertCircle size={10} /> {t.warningCrop}
+              </div>
+            )}
 
-        {photos.length > 0 ? (
-          <div className="flex h-full w-full items-center justify-center">
-            <CanvasPreview
-              photos={photos}
-              settings={settings}
-              onHeightViolation={setIsTooTall}
-              ref={canvasRef}
-            />
+            {photos.length > 0 ? (
+              <div className="relative mb-2 flex-1 overflow-hidden rounded-lg">
+                <CanvasPreview
+                  photos={photos}
+                  settings={settings}
+                  onHeightViolation={setIsTooTall}
+                  ref={canvasRef}
+                />
+              </div>
+            ) : (
+              <div className="mb-2 flex flex-1 flex-col items-center justify-center rounded-lg border border-slate-200 bg-white p-4 text-center dark:border-slate-800 dark:bg-slate-900">
+                <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-2xl border border-slate-100 bg-slate-50 text-slate-200 dark:border-slate-800 dark:bg-slate-800 dark:text-slate-700">
+                  <Layout size={24} />
+                </div>
+                <h3 className="text-xs font-black text-slate-800 dark:text-slate-200">
+                  {t.emptyTitle}
+                </h3>
+                <p className="mt-1 text-[9px] leading-relaxed text-slate-400 dark:text-slate-500">
+                  {t.emptyDesc}
+                </p>
+              </div>
+            )}
+
+            <button
+              onClick={handleExport}
+              disabled={photos.length === 0}
+              className={`flex w-full items-center justify-center gap-2 rounded-2xl py-3 text-[10px] font-black transition-all active:scale-95 ${
+                photos.length === 0
+                  ? 'cursor-not-allowed border border-slate-300 bg-slate-200 text-slate-400 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-600'
+                  : 'bg-indigo-600 text-white shadow-lg hover:bg-indigo-700'
+              }`}
+            >
+              <Download size={14} /> {t.export}
+            </button>
           </div>
-        ) : (
-          <div className="max-w-sm text-center">
-            <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-[2.5rem] border border-slate-100 bg-white text-slate-200 shadow-sm dark:border-slate-800 dark:bg-slate-900 dark:text-slate-800">
-              <Layout size={40} />
+
+          {/* Right Column: Thumbnails */}
+          <div className="flex w-24 flex-col gap-2 overflow-y-auto rounded-lg bg-white p-2 dark:bg-slate-900">
+            {photos.length > 0 ? (
+              <>
+                {photos.map((p, idx) => (
+                  <div
+                    key={p.id}
+                    draggable
+                    onDragStart={() => handleDragStart(idx)}
+                    onDragOver={(e) => handleDragOver(e, idx)}
+                    onDragEnd={handleDragEnd}
+                    className={`group relative cursor-grab rounded-lg border transition-all active:cursor-grabbing ${
+                      draggedIndex === idx
+                        ? 'scale-95 border-indigo-500 opacity-40'
+                        : 'border-slate-200 hover:border-indigo-300 dark:border-slate-700 dark:hover:border-indigo-500'
+                    }`}
+                  >
+                    <div className="relative aspect-square overflow-hidden rounded-lg bg-slate-100 dark:bg-slate-800">
+                      <img
+                        src={p.preview}
+                        className="h-full w-full object-cover"
+                        alt={`Photo ${idx + 1}`}
+                      />
+                      <div className="absolute top-0 left-0 rounded-br-md bg-indigo-600 px-1 py-0.5 text-[8px] font-black text-white">
+                        {idx + 1}
+                      </div>
+                      <div className="absolute inset-0 flex items-center justify-center bg-slate-900/0 transition-colors group-hover:bg-slate-900/50">
+                        <GripVertical
+                          size={16}
+                          className="text-white opacity-0 transition-opacity group-hover:opacity-100"
+                        />
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => removePhoto(p.id)}
+                      className="absolute -top-1 -right-1 rounded-full bg-red-500 p-0.5 text-white opacity-0 shadow-md transition-opacity group-hover:opacity-100 hover:bg-red-600"
+                    >
+                      <Trash2 size={10} />
+                    </button>
+                  </div>
+                ))}
+                {photos.length > 1 && (
+                  <button
+                    onClick={reverseOrder}
+                    className="mt-1 flex items-center justify-center gap-1 rounded-lg bg-slate-100 py-2 text-[8px] font-black text-indigo-600 transition-colors hover:bg-indigo-50 dark:bg-slate-800 dark:hover:bg-indigo-900/30"
+                  >
+                    <ArrowUpDown size={10} />
+                  </button>
+                )}
+              </>
+            ) : (
+              <div className="flex h-full items-center justify-center">
+                <p className="text-center text-[8px] font-bold text-slate-400 dark:text-slate-600">
+                  {t.stackList}
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Desktop Canvas View */}
+        <div className="hidden lg:flex lg:h-full lg:w-full lg:items-center lg:justify-center">
+          {isTooTall && (
+            <div className="absolute top-6 z-10 flex animate-pulse items-center gap-3 rounded-full bg-red-600 px-6 py-2.5 text-[10px] font-black text-white shadow-2xl">
+              <AlertCircle size={14} /> {t.warningHeight}{' '}
+              {FORMATS[settings.format].height}px!
             </div>
-            <h3 className="text-lg font-black tracking-tight text-slate-800 dark:text-slate-200">
-              {t.emptyTitle}
-            </h3>
-            <p className="mt-2 text-xs leading-relaxed text-slate-400 dark:text-slate-500">
-              {t.emptyDesc}
-            </p>
-          </div>
-        )}
+          )}
 
-        <div className="absolute bottom-3 flex gap-3 text-[9px] font-black tracking-[0.2em] text-slate-400 uppercase lg:bottom-6 lg:gap-6 lg:text-[10px] lg:tracking-[0.3em] dark:text-slate-600">
-          <span>{FORMATS[settings.format].label}</span>
-          <span className="opacity-20">•</span>
-          <span className="hidden sm:inline">
-            {t.res}: {FORMATS[settings.format].width} x{' '}
-            {FORMATS[settings.format].height}
-          </span>
-          <span className="sm:hidden">
-            {FORMATS[settings.format].width} x {FORMATS[settings.format].height}
-          </span>
+          {photos.length > 0 ? (
+            <div className="flex h-full w-full items-center justify-center">
+              <CanvasPreview
+                photos={photos}
+                settings={settings}
+                onHeightViolation={setIsTooTall}
+                ref={canvasRef}
+              />
+            </div>
+          ) : (
+            <div className="max-w-sm text-center">
+              <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-[2.5rem] border border-slate-100 bg-white text-slate-200 shadow-sm dark:border-slate-800 dark:bg-slate-900 dark:text-slate-800">
+                <Layout size={40} />
+              </div>
+              <h3 className="text-lg font-black tracking-tight text-slate-800 dark:text-slate-200">
+                {t.emptyTitle}
+              </h3>
+              <p className="mt-2 text-xs leading-relaxed text-slate-400 dark:text-slate-500">
+                {t.emptyDesc}
+              </p>
+            </div>
+          )}
+
+          <div className="absolute bottom-6 flex gap-6 text-[10px] font-black tracking-[0.3em] text-slate-400 uppercase dark:text-slate-600">
+            <span>{FORMATS[settings.format].label}</span>
+            <span className="opacity-20">•</span>
+            <span>
+              {t.res}: {FORMATS[settings.format].width} x{' '}
+              {FORMATS[settings.format].height}
+            </span>
+          </div>
         </div>
       </main>
 
-      {/* COLUMN 3: Photo Management List */}
-      <aside className="flex w-full flex-col overflow-hidden border-t border-slate-200 bg-white shadow-sm transition-colors duration-200 lg:w-80 lg:border-t-0 lg:border-l dark:border-slate-800 dark:bg-slate-900">
-        <div className="flex items-center justify-between border-b border-slate-100 bg-slate-50/30 p-4 lg:p-6 dark:border-slate-800 dark:bg-slate-900/30">
+      {/* COLUMN 3: Photo Management List - Desktop Only */}
+      <aside className="hidden w-80 flex-col overflow-hidden border-l border-slate-200 bg-white shadow-sm transition-colors duration-200 lg:flex dark:border-slate-800 dark:bg-slate-900">
+        <div className="flex items-center justify-between border-b border-slate-100 bg-slate-50/30 p-6 dark:border-slate-800 dark:bg-slate-900/30">
           <div className="flex items-center gap-2">
             <ImageIcon
               size={14}
