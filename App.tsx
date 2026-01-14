@@ -31,7 +31,6 @@ const translations = {
     title: 'STK.',
     subtitle: 'Creative Stacker',
     addPhoto: 'Add Photos',
-    addImage: 'Add Image',
     dragDrop: 'Drag or click',
     options: 'Options',
     format: 'Canvas Format',
@@ -61,7 +60,6 @@ const translations = {
     title: 'STK.',
     subtitle: 'Creative Stacker',
     addPhoto: 'Aggiungi Foto',
-    addImage: 'Aggiungi Immagine',
     dragDrop: 'Trascina o clicca',
     options: 'Opzioni',
     format: 'Formato Tela',
@@ -201,7 +199,7 @@ const ImageUploader: React.FC<{
         <>
           <Plus size={14} className="text-slate-600 dark:text-slate-400" />
           <span className="text-[10px] font-bold text-slate-600 dark:text-slate-400">
-            {t.addImage}
+            {t.addPhoto}
           </span>
         </>
       ) : (
