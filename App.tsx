@@ -114,6 +114,7 @@ const FORMATS = {
 };
 
 const MOBILE_CANVAS_OFFSET = 300; // Offset for mobile canvas height calculation
+const MOBILE_THUMBNAIL_WIDTH = 100; // Width of thumbnails in mobile horizontal scroll
 
 const getInitialLang = (): Language => {
   const browserLang = navigator.language.split('-')[0];
@@ -630,7 +631,8 @@ export default function App() {
                         ? 'scale-95 border-indigo-500 opacity-50'
                         : 'border-slate-200 dark:border-slate-700'
                     }`}
-                    style={{ width: '100px' }}
+                    style={{ width: `${MOBILE_THUMBNAIL_WIDTH}px` }}
+                    aria-label={`${t.image} ${idx + 1} - ${t.dragToSort}`}
                   >
                     <div className="relative aspect-square overflow-hidden rounded-lg bg-slate-100 dark:bg-slate-900">
                       <img
@@ -645,12 +647,14 @@ export default function App() {
                         <GripVertical
                           size={20}
                           className="text-white opacity-60"
+                          aria-label={t.dragToSort}
                         />
                       </div>
                     </div>
                     <button
                       onClick={() => removePhoto(p.id)}
                       className="absolute -top-1.5 -right-1.5 rounded-full bg-red-500 p-1.5 text-white shadow-lg transition-transform hover:scale-110 hover:bg-red-600 active:scale-95"
+                      aria-label={`${t.remove} ${t.image} ${idx + 1}`}
                     >
                       <Trash2 size={12} />
                     </button>
