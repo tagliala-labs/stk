@@ -259,7 +259,7 @@ const CanvasPreview = forwardRef<
   }, [photos, settings, onHeightViolation]);
 
   return (
-    <div className="relative overflow-hidden rounded-sm border-4 border-indigo-500/30 bg-black shadow-2xl ring-1 ring-slate-200 dark:border-indigo-400/40 dark:ring-slate-700">
+    <div className="relative overflow-hidden rounded-sm border-4 border-indigo-400/80 bg-black dark:border-indigo-600/80">
       <canvas
         ref={canvasRef}
         className="block h-auto max-w-full"
