@@ -289,7 +289,7 @@ export default function App() {
 
   const [settings, setSettings] = useState<Settings>({
     backgroundColor: '#000000',
-    spacing: 2,
+    spacing: 4,
     padding: 0,
     format: '9:16',
   });
