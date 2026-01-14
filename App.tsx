@@ -158,6 +158,22 @@ const ImageUploader: React.FC<{
     });
   };
 
+  const getContainerClasses = () => {
+    const baseClasses = 'group relative flex cursor-pointer';
+
+    if (compact) {
+      return `${baseClasses} flex-row items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-2.5 transition-colors hover:border-indigo-300 dark:border-slate-700 dark:bg-slate-800`;
+    }
+
+    const layoutClasses =
+      'flex-col items-center justify-center rounded-3xl border-2 border-dashed p-5 text-center transition-all duration-300';
+    const dragClasses = isDragging
+      ? 'border-indigo-500 bg-indigo-50/50 dark:bg-indigo-900/20'
+      : 'border-slate-200 hover:border-indigo-400 hover:bg-slate-50 dark:border-slate-800 dark:hover:border-indigo-500 dark:hover:bg-slate-800/50';
+
+    return `${baseClasses} ${layoutClasses} ${dragClasses}`;
+  };
+
   return (
     <div
       onDragOver={(e) => {
@@ -171,17 +187,7 @@ const ImageUploader: React.FC<{
         processFiles(e.dataTransfer.files);
       }}
       onClick={() => fileInputRef.current?.click()}
-      className={`group relative flex cursor-pointer ${
-        compact
-          ? 'flex-row items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-2.5 transition-colors hover:border-indigo-300 dark:border-slate-700 dark:bg-slate-800'
-          : 'flex-col items-center justify-center rounded-3xl border-2 border-dashed p-5 text-center transition-all duration-300'
-      } ${
-        !compact && isDragging
-          ? 'border-indigo-500 bg-indigo-50/50 dark:bg-indigo-900/20'
-          : !compact
-            ? 'border-slate-200 hover:border-indigo-400 hover:bg-slate-50 dark:border-slate-800 dark:hover:border-indigo-500 dark:hover:bg-slate-800/50'
-            : ''
-      }`}
+      className={getContainerClasses()}
     >
       <input
         type="file"
