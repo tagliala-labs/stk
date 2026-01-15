@@ -687,10 +687,10 @@ export default function App() {
                     onTouchStart={(e) => handleTouchStart(e, idx)}
                     onTouchMove={handleTouchMove}
                     onTouchEnd={handleTouchEnd}
-                    className={`group relative cursor-grab rounded-lg border transition-all active:cursor-grabbing ${
+                    className={`draggable-item group relative cursor-grab rounded-lg border active:cursor-grabbing ${
                       draggedIndex === idx
-                        ? 'scale-95 border-indigo-500 opacity-40'
-                        : 'border-slate-200 hover:border-indigo-300 dark:border-slate-700 dark:hover:border-indigo-500'
+                        ? 'dragging-active border-indigo-500'
+                        : 'border-slate-200 transition-all hover:border-indigo-300 dark:border-slate-700 dark:hover:border-indigo-500'
                     }`}
                   >
                     <div className="relative aspect-square overflow-hidden rounded-lg bg-slate-100 dark:bg-slate-800">
@@ -814,10 +814,10 @@ export default function App() {
               onTouchStart={(e) => handleTouchStart(e, idx)}
               onTouchMove={handleTouchMove}
               onTouchEnd={handleTouchEnd}
-              className={`group flex cursor-grab items-center gap-3 rounded-2xl border bg-white p-2.5 transition-all active:cursor-grabbing dark:bg-slate-800 ${
+              className={`draggable-item group flex cursor-grab items-center gap-3 rounded-2xl border bg-white p-2.5 active:cursor-grabbing dark:bg-slate-800 ${
                 draggedIndex === idx
-                  ? 'scale-95 border-indigo-500 opacity-40 shadow-none'
-                  : 'border-slate-200 shadow-sm hover:border-indigo-300 dark:border-slate-700 dark:hover:border-indigo-500'
+                  ? 'dragging-active border-indigo-500'
+                  : 'border-slate-200 shadow-sm transition-all hover:border-indigo-300 dark:border-slate-700 dark:hover:border-indigo-500'
               }`}
             >
               <div className="pl-0.5 text-slate-300 group-hover:text-slate-400 dark:text-slate-600 dark:group-hover:text-slate-500">
