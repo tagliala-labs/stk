@@ -372,7 +372,7 @@ export default function App() {
   return (
     <div className="flex min-h-screen flex-col overflow-auto bg-[#fafafa] transition-colors duration-200 lg:h-screen lg:flex-row lg:overflow-hidden dark:bg-slate-950">
       {/* COLUMN 1: Settings */}
-      <aside className="flex w-full flex-col overflow-hidden border-b border-slate-200 bg-white shadow-sm transition-colors duration-200 lg:w-72 lg:border-r lg:border-b-0 dark:border-slate-800 dark:bg-slate-900" style={{ paddingTop: 'max(1rem, env(safe-area-inset-top))' }}>
+      <aside className="safe-area-top flex w-full flex-col overflow-hidden border-b border-slate-200 bg-white shadow-sm transition-colors duration-200 lg:w-72 lg:border-r lg:border-b-0 dark:border-slate-800 dark:bg-slate-900">
         <div className="p-4 pb-2 lg:p-6 lg:pb-2">
           <div className="mb-3 flex items-start justify-between lg:mb-4">
             <div>
@@ -579,8 +579,8 @@ export default function App() {
 
       {/* MOBILE: Combined Canvas and Photo List - Desktop: Canvas Only */}
       <main className="relative flex flex-1 flex-col overflow-auto bg-[#f0f2f5] transition-colors duration-200 lg:flex-row lg:items-center lg:justify-center lg:overflow-hidden lg:p-6 dark:bg-slate-950">
-        {/* Mobile Two Column Layout */}
-        <div className="flex min-h-[calc(100vh-180px)] flex-row gap-2 p-2 lg:hidden" style={{ paddingBottom: 'max(0.5rem, env(safe-area-inset-bottom))' }}>
+        {/* Mobile Two Column Layout - min-height accounts for header (~180px) */}
+        <div className="safe-area-bottom flex min-h-[calc(100vh-180px)] flex-row gap-2 p-2 lg:hidden">
           {/* Left Column: Canvas + Export */}
           <div className="flex flex-1 flex-col">
             {isTooTall && (
