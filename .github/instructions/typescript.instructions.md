@@ -29,7 +29,7 @@ When working with TypeScript files in this project, follow these specific guidel
 
 ### TypeScript Configuration
 
-1. **Type Safety** - Follow the TypeScript settings in `tsconfig.json`
+1. **Type Safety** - Follow the TypeScript compiler options in `tsconfig.json` (ES2022 target, ESNext modules, bundler resolution)
 2. **Module System** - Use ESNext modules with `import`/`export`
 3. **JSX** - Use `react-jsx` mode for automatic JSX transform
 4. **Path Aliases** - Use `@/` for root-level imports as configured in `tsconfig.json`
