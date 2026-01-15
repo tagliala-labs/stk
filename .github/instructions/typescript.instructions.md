@@ -29,7 +29,7 @@ When working with TypeScript files in this project, follow these specific guidel
 
 ### TypeScript Configuration
 
-1. **Strict Mode** - Follow the strict TypeScript settings in `tsconfig.json`
+1. **Type Safety** - Follow the TypeScript settings in `tsconfig.json`
 2. **Module System** - Use ESNext modules with `import`/`export`
 3. **JSX** - Use `react-jsx` mode for automatic JSX transform
 4. **Path Aliases** - Use `@/` for root-level imports as configured in `tsconfig.json`
@@ -43,7 +43,7 @@ When working with TypeScript files in this project, follow these specific guidel
 
 ### React with TypeScript
 
-1. **Functional Components** - Use `React.FC` for functional components that don't use `forwardRef`
+1. **Functional Components** - Use plain function declarations for components
 2. **Hooks Typing** - Properly type `useState`, `useRef`, and other hooks
 3. **Event Types** - Use proper React event types (e.g., `React.ChangeEvent<HTMLInputElement>`)
 4. **Ref Types** - Use `React.RefObject` or `React.MutableRefObject` for refs

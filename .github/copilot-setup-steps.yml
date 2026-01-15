@@ -1,27 +1,19 @@
-name: Setup STK Development Environment
+steps:
+  - name: Setup Node.js
+    uses: actions/setup-node@v4
+    with:
+      node-version: '20.x'
 
-on:
-  workflow_dispatch:
+  - name: Setup pnpm
+    uses: pnpm/action-setup@v4
+    with:
+      version: 10
 
-jobs:
-  setup:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20.x'
+  - name: Install dependencies
+    run: pnpm install
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10
+  - name: Verify build
+    run: pnpm run build
 
-      - name: Install dependencies
-        run: pnpm install
-
-      - name: Verify build
-        run: pnpm run build
-
-      - name: Verify formatting
-        run: pnpm run lint
+  - name: Verify formatting
+    run: pnpm run lint
