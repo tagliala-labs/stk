@@ -303,6 +303,8 @@ export default function App() {
   const [isTooTall, setIsTooTall] = useState(false);
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const [showMobileSettings, setShowMobileSettings] = useState(false);
+  const [touchStartY, setTouchStartY] = useState<number | null>(null);
+  const [touchCurrentY, setTouchCurrentY] = useState<number | null>(null);
 
   const [settings, setSettings] = useState<Settings>({
     backgroundColor: '#000000',
@@ -368,6 +370,51 @@ export default function App() {
     setPhotos(newPhotos);
   };
   const handleDragEnd = () => setDraggedIndex(null);
+
+  // Touch event handlers for iOS support
+  const handleTouchStart = (e: React.TouchEvent, index: number) => {
+    setDraggedIndex(index);
+    setTouchStartY(e.touches[0].clientY);
+    setTouchCurrentY(e.touches[0].clientY);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (draggedIndex === null || touchStartY === null) return;
+    const currentY = e.touches[0].clientY;
+    setTouchCurrentY(currentY);
+
+    // Find the element under the touch point
+    const touch = e.touches[0];
+    const elementAtPoint = document.elementFromPoint(
+      touch.clientX,
+      touch.clientY
+    );
+
+    if (elementAtPoint) {
+      // Find the closest photo container
+      const photoElement = elementAtPoint.closest('[data-photo-index]');
+      if (photoElement) {
+        const targetIndex = parseInt(
+          photoElement.getAttribute('data-photo-index') || '',
+          10
+        );
+        if (!isNaN(targetIndex) && targetIndex !== draggedIndex) {
+          const newPhotos = [...photos];
+          const draggedItem = newPhotos[draggedIndex];
+          newPhotos.splice(draggedIndex, 1);
+          newPhotos.splice(targetIndex, 0, draggedItem);
+          setDraggedIndex(targetIndex);
+          setPhotos(newPhotos);
+        }
+      }
+    }
+  };
+
+  const handleTouchEnd = () => {
+    setDraggedIndex(null);
+    setTouchStartY(null);
+    setTouchCurrentY(null);
+  };
 
   return (
     <div className="flex min-h-screen flex-col overflow-auto bg-[#fafafa] transition-colors duration-200 lg:h-screen lg:flex-row lg:overflow-hidden dark:bg-slate-950">
@@ -632,10 +679,14 @@ export default function App() {
                 {photos.map((p, idx) => (
                   <div
                     key={p.id}
+                    data-photo-index={idx}
                     draggable
                     onDragStart={() => handleDragStart(idx)}
                     onDragOver={(e) => handleDragOver(e, idx)}
                     onDragEnd={handleDragEnd}
+                    onTouchStart={(e) => handleTouchStart(e, idx)}
+                    onTouchMove={handleTouchMove}
+                    onTouchEnd={handleTouchEnd}
                     className={`group relative cursor-grab rounded-lg border transition-all active:cursor-grabbing ${
                       draggedIndex === idx
                         ? 'scale-95 border-indigo-500 opacity-40'
@@ -755,10 +806,14 @@ export default function App() {
           {photos.map((p, idx) => (
             <div
               key={p.id}
+              data-photo-index={idx}
               draggable
               onDragStart={() => handleDragStart(idx)}
               onDragOver={(e) => handleDragOver(e, idx)}
               onDragEnd={handleDragEnd}
+              onTouchStart={(e) => handleTouchStart(e, idx)}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
               className={`group flex cursor-grab items-center gap-3 rounded-2xl border bg-white p-2.5 transition-all active:cursor-grabbing dark:bg-slate-800 ${
                 draggedIndex === idx
                   ? 'scale-95 border-indigo-500 opacity-40 shadow-none'
