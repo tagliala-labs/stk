@@ -773,6 +773,7 @@ export default function App() {
                     </div>
                     <button
                       onClick={() => removePhoto(p.id)}
+                      aria-label={`${t.remove} ${idx + 1}`}
                       className="absolute -top-1 -right-1 rounded-full bg-red-500 p-0.5 text-white shadow-md transition-opacity select-none hover:bg-red-600 lg:opacity-0 lg:group-hover:opacity-100"
                     >
                       <Trash2 size={10} />
@@ -782,6 +783,7 @@ export default function App() {
                 {photos.length > 1 && (
                   <button
                     onClick={reverseOrder}
+                    aria-label={t.reverse}
                     className="mt-1 flex items-center justify-center gap-1 rounded-lg bg-slate-100 py-2 text-[8px] font-black text-indigo-600 transition-colors select-none hover:bg-indigo-50 dark:bg-slate-800 dark:hover:bg-indigo-900/30"
                   >
                     <ArrowUpDown size={10} />
@@ -790,6 +792,7 @@ export default function App() {
                 {photos.length > 0 && (
                   <button
                     onClick={clearAllPhotos}
+                    aria-label={t.clear}
                     className="mt-1 flex items-center justify-center gap-1 rounded-lg bg-red-50 py-2 text-[8px] font-black text-red-600 transition-colors select-none hover:bg-red-100 dark:bg-red-900/20 dark:text-red-500 dark:hover:bg-red-900/30"
                   >
                     <Trash2 size={10} />
@@ -927,6 +930,7 @@ export default function App() {
                 </button>
                 <button
                   onClick={() => removePhoto(p.id)}
+                  aria-label={`${t.remove} ${idx + 1}`}
                   className="rounded-md p-1 text-slate-400 select-none hover:bg-red-50 hover:text-red-500 dark:text-slate-500 dark:hover:bg-red-900/30"
                 >
                   <Trash2 size={14} />
