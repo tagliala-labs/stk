@@ -55,6 +55,8 @@ const translations = {
     stackList: 'Stack Content',
     theme: 'Theme',
     github: 'View on GitHub',
+    clearConfirm: 'Are you sure you want to remove all images?',
+    unsavedChanges: 'You have unsaved changes. Are you sure you want to leave?',
   },
   it: {
     title: 'STK.',
@@ -84,6 +86,8 @@ const translations = {
     stackList: 'Contenuto Stack',
     theme: 'Tema',
     github: 'Vedi su GitHub',
+    clearConfirm: 'Sei sicuro di voler rimuovere tutte le immagini?',
+    unsavedChanges: 'Hai modifiche non salvate. Sei sicuro di voler uscire?',
   },
 };
 
@@ -319,6 +323,7 @@ export default function App() {
   const t = translations[lang];
 
   const [photos, setPhotos] = useState<Photo[]>([]);
+  const [hasChanges, setHasChanges] = useState(false);
   const [isTooTall, setIsTooTall] = useState(false);
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const [showMobileSettings, setShowMobileSettings] = useState(false);
@@ -344,16 +349,34 @@ export default function App() {
     }
   }, [isDark]);
 
+  // Warn user when leaving page with unsaved changes
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (hasChanges) {
+        e.preventDefault();
+        e.returnValue = t.unsavedChanges;
+        return t.unsavedChanges;
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [hasChanges, t.unsavedChanges]);
+
   const handleExport = () => {
     if (!canvasRef.current) return;
     const link = document.createElement('a');
     link.download = `stack-${settings.format.replace(':', '-')}-${Date.now()}.jpg`;
     link.href = canvasRef.current.toDataURL('image/jpeg', 0.95);
     link.click();
+    // Reset changes flag after export since work is saved
+    setHasChanges(false);
   };
 
-  const removePhoto = (id: string) =>
+  const removePhoto = (id: string) => {
     setPhotos((prev) => prev.filter((p) => p.id !== id));
+    setHasChanges(true);
+  };
 
   const moveUp = (index: number) => {
     if (index === 0) return;
@@ -362,6 +385,7 @@ export default function App() {
     newPhotos[index] = newPhotos[index - 1];
     newPhotos[index - 1] = temp;
     setPhotos(newPhotos);
+    setHasChanges(true);
   };
 
   const moveDown = (index: number) => {
@@ -371,9 +395,20 @@ export default function App() {
     newPhotos[index] = newPhotos[index + 1];
     newPhotos[index + 1] = temp;
     setPhotos(newPhotos);
+    setHasChanges(true);
   };
 
-  const reverseOrder = () => setPhotos((prev) => [...prev].reverse());
+  const reverseOrder = () => {
+    setPhotos((prev) => [...prev].reverse());
+    setHasChanges(true);
+  };
+
+  const clearAllPhotos = () => {
+    if (window.confirm(t.clearConfirm)) {
+      setPhotos([]);
+      setHasChanges(false);
+    }
+  };
   const toggleLang = () => setLang((prev) => (prev === 'en' ? 'it' : 'en'));
   const toggleTheme = () => setIsDark((prev) => !prev);
 
@@ -387,6 +422,7 @@ export default function App() {
     newPhotos.splice(index, 0, draggedItem);
     setDraggedIndex(index);
     setPhotos(newPhotos);
+    setHasChanges(true);
   };
   const handleDragEnd = () => setDraggedIndex(null);
 
@@ -424,6 +460,7 @@ export default function App() {
           newPhotos.splice(targetIndex, 0, draggedItem);
           setDraggedIndex(targetIndex);
           setPhotos(newPhotos);
+          setHasChanges(true);
         }
       }
     }
@@ -477,7 +514,10 @@ export default function App() {
           {/* Desktop: Full ImageUploader */}
           <div className="hidden lg:block">
             <ImageUploader
-              onUpload={(newOnes) => setPhotos([...photos, ...newOnes])}
+              onUpload={(newOnes) => {
+                setPhotos([...photos, ...newOnes]);
+                setHasChanges(true);
+              }}
               t={t}
             />
           </div>
@@ -486,7 +526,10 @@ export default function App() {
           <div className="flex gap-2 lg:hidden">
             <div className="flex-1">
               <ImageUploader
-                onUpload={(newOnes) => setPhotos([...photos, ...newOnes])}
+                onUpload={(newOnes) => {
+                  setPhotos([...photos, ...newOnes]);
+                  setHasChanges(true);
+                }}
                 t={t}
                 compact
               />
@@ -730,7 +773,8 @@ export default function App() {
                     </div>
                     <button
                       onClick={() => removePhoto(p.id)}
-                      className="absolute -top-1 -right-1 rounded-full bg-red-500 p-0.5 text-white opacity-0 shadow-md transition-opacity select-none group-hover:opacity-100 hover:bg-red-600"
+                      aria-label={`${t.remove} ${idx + 1}`}
+                      className="absolute -top-1 -right-1 rounded-full bg-red-500 p-0.5 text-white shadow-md transition-opacity select-none hover:bg-red-600 lg:opacity-0 lg:group-hover:opacity-100"
                     >
                       <Trash2 size={10} />
                     </button>
@@ -739,9 +783,19 @@ export default function App() {
                 {photos.length > 1 && (
                   <button
                     onClick={reverseOrder}
+                    aria-label={t.reverse}
                     className="mt-1 flex items-center justify-center gap-1 rounded-lg bg-slate-100 py-2 text-[8px] font-black text-indigo-600 transition-colors select-none hover:bg-indigo-50 dark:bg-slate-800 dark:hover:bg-indigo-900/30"
                   >
                     <ArrowUpDown size={10} />
+                  </button>
+                )}
+                {photos.length > 0 && (
+                  <button
+                    onClick={clearAllPhotos}
+                    aria-label={t.clear}
+                    className="mt-1 flex items-center justify-center gap-1 rounded-lg bg-red-50 py-2 text-[8px] font-black text-red-600 transition-colors select-none hover:bg-red-100 dark:bg-red-900/20 dark:text-red-500 dark:hover:bg-red-900/30"
+                  >
+                    <Trash2 size={10} />
                   </button>
                 )}
               </>
@@ -876,6 +930,7 @@ export default function App() {
                 </button>
                 <button
                   onClick={() => removePhoto(p.id)}
+                  aria-label={`${t.remove} ${idx + 1}`}
                   className="rounded-md p-1 text-slate-400 select-none hover:bg-red-50 hover:text-red-500 dark:text-slate-500 dark:hover:bg-red-900/30"
                 >
                   <Trash2 size={14} />
@@ -888,7 +943,7 @@ export default function App() {
         {photos.length > 0 && (
           <div className="border-t border-slate-100 p-4 dark:border-slate-800">
             <button
-              onClick={() => setPhotos([])}
+              onClick={clearAllPhotos}
               className="w-full rounded-xl py-2 text-[10px] font-black tracking-widest text-red-400 uppercase transition-colors select-none hover:bg-red-50/50 hover:text-red-600 dark:text-red-500 dark:hover:bg-red-900/20"
             >
               {t.clear}
