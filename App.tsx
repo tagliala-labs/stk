@@ -55,9 +55,6 @@ const translations = {
     stackList: 'Stack Content',
     theme: 'Theme',
     github: 'View on GitHub',
-    copiedToClipboard: 'Copied to clipboard!',
-    copyFailed: 'Copy failed',
-    longPressToCopy: 'Long press to copy',
   },
   it: {
     title: 'STK.',
@@ -87,9 +84,6 @@ const translations = {
     stackList: 'Contenuto Stack',
     theme: 'Tema',
     github: 'Vedi su GitHub',
-    copiedToClipboard: 'Copiato negli appunti!',
-    copyFailed: 'Copia fallita',
-    longPressToCopy: 'Tieni premuto per copiare',
   },
 };
 
@@ -233,6 +227,7 @@ const CanvasPreview = forwardRef<
   }
 >(({ photos, settings, onHeightViolation }, ref) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [imageDataUrl, setImageDataUrl] = useState<string>('');
   useImperativeHandle(ref, () => canvasRef.current!);
 
   useEffect(() => {
@@ -248,7 +243,10 @@ const CanvasPreview = forwardRef<
     ctx.fillStyle = settings.backgroundColor;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    if (photos.length === 0) return;
+    if (photos.length === 0) {
+      setImageDataUrl('');
+      return;
+    }
 
     let isMounted = true;
     const loadAndDraw = async () => {
@@ -280,6 +278,9 @@ const CanvasPreview = forwardRef<
         ctx.drawImage(item.img, (config.width - item.w) / 2, y, item.w, item.h);
         y += item.h + settings.spacing;
       });
+
+      // Convert canvas to image data URL for display
+      setImageDataUrl(canvas.toDataURL('image/png'));
     };
 
     loadAndDraw();
@@ -290,7 +291,16 @@ const CanvasPreview = forwardRef<
 
   return (
     <div className="relative h-full overflow-hidden rounded-sm border-4 border-indigo-400/80 bg-black dark:border-indigo-600/80">
-      <canvas ref={canvasRef} className="block h-full w-full object-contain" />
+      {/* Hidden canvas for export functionality */}
+      <canvas ref={canvasRef} className="hidden" />
+      {/* Display as a regular image for native browser interactions */}
+      {imageDataUrl && (
+        <img
+          src={imageDataUrl}
+          alt="Canvas preview"
+          className="block h-full w-full object-contain"
+        />
+      )}
     </div>
   );
 });
@@ -311,10 +321,6 @@ export default function App() {
   const [showMobileSettings, setShowMobileSettings] = useState(false);
   const [touchStartY, setTouchStartY] = useState<number | null>(null);
   const [touchCurrentY, setTouchCurrentY] = useState<number | null>(null);
-  const [longPressTimer, setLongPressTimer] = useState<NodeJS.Timeout | null>(
-    null
-  );
-  const [copyFeedback, setCopyFeedback] = useState<string | null>(null);
 
   const [settings, setSettings] = useState<Settings>({
     backgroundColor: '#000000',
@@ -426,65 +432,8 @@ export default function App() {
     setTouchCurrentY(null);
   };
 
-  // Canvas long-press to copy functionality
-  const copyCanvasToClipboard = async () => {
-    if (!canvasRef.current) return;
-
-    try {
-      const blob = await new Promise<Blob | null>((resolve) => {
-        canvasRef.current?.toBlob((b) => resolve(b), 'image/png');
-      });
-
-      if (!blob) {
-        setCopyFeedback(t.copyFailed);
-        setTimeout(() => setCopyFeedback(null), 2000);
-        return;
-      }
-
-      await navigator.clipboard.write([
-        new ClipboardItem({ 'image/png': blob }),
-      ]);
-
-      setCopyFeedback(t.copiedToClipboard);
-      setTimeout(() => setCopyFeedback(null), 2000);
-    } catch (err) {
-      console.error('Failed to copy canvas:', err);
-      setCopyFeedback(t.copyFailed);
-      setTimeout(() => setCopyFeedback(null), 2000);
-    }
-  };
-
-  const handleCanvasLongPressStart = (e: React.TouchEvent) => {
-    if (photos.length === 0) return;
-
-    const timer = setTimeout(() => {
-      copyCanvasToClipboard();
-      // Provide haptic feedback if available
-      if (navigator.vibrate) {
-        navigator.vibrate(50);
-      }
-    }, 500);
-
-    setLongPressTimer(timer);
-  };
-
-  const handleCanvasLongPressEnd = () => {
-    if (longPressTimer) {
-      clearTimeout(longPressTimer);
-      setLongPressTimer(null);
-    }
-  };
-
-  const handleCanvasLongPressMove = () => {
-    // Cancel long press if user moves finger
-    if (longPressTimer) {
-      clearTimeout(longPressTimer);
-      setLongPressTimer(null);
-    }
-  };
-
   return (
-    <div className="flex flex-1 flex-col overflow-auto bg-[#fafafa] transition-colors duration-200 lg:h-screen lg:flex-row lg:overflow-hidden dark:bg-slate-950 h-full">
+    <div className="flex h-full flex-1 flex-col overflow-auto bg-[#fafafa] transition-colors duration-200 lg:h-screen lg:flex-row lg:overflow-hidden dark:bg-slate-950">
       {/* COLUMN 1: Settings */}
       <aside className="flex w-full flex-col overflow-hidden border-b border-slate-200 bg-white shadow-sm transition-colors duration-200 lg:w-72 lg:border-r lg:border-b-0 dark:border-slate-800 dark:bg-slate-900">
         <div className="p-4 pb-2 lg:p-6 lg:pb-2">
@@ -694,7 +643,7 @@ export default function App() {
       {/* MOBILE: Combined Canvas and Photo List - Desktop: Canvas Only */}
       <main className="relative flex flex-1 flex-col overflow-auto bg-[#f0f2f5] transition-colors duration-200 lg:flex-row lg:items-center lg:justify-center lg:overflow-hidden lg:p-6 dark:bg-slate-950">
         {/* Mobile Two Column Layout - min-height accounts for header (~180px) */}
-        <div className="flex flex-row flex-1 gap-2 p-2 lg:hidden">
+        <div className="flex flex-1 flex-row gap-2 p-2 lg:hidden">
           {/* Left Column: Canvas + Export */}
           <div className="flex flex-1 flex-col">
             {isTooTall && (
@@ -704,27 +653,13 @@ export default function App() {
             )}
 
             {photos.length > 0 ? (
-              <div
-                className="relative mb-2 flex flex-1 items-center justify-center overflow-hidden rounded-lg"
-                onTouchStart={handleCanvasLongPressStart}
-                onTouchEnd={handleCanvasLongPressEnd}
-                onTouchMove={handleCanvasLongPressMove}
-                onContextMenu={(e) => e.preventDefault()}
-              >
+              <div className="relative mb-2 flex flex-1 items-center justify-center overflow-hidden rounded-lg">
                 <CanvasPreview
                   photos={photos}
                   settings={settings}
                   onHeightViolation={setIsTooTall}
                   ref={canvasRef}
                 />
-                {/* Copy feedback overlay */}
-                {copyFeedback && (
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-                    <div className="rounded-2xl bg-white px-6 py-3 text-sm font-bold text-slate-900 shadow-xl dark:bg-slate-800 dark:text-white">
-                      {copyFeedback}
-                    </div>
-                  </div>
-                )}
               </div>
             ) : (
               <div className="mb-2 flex flex-1 flex-col items-center justify-center rounded-lg border border-slate-200 bg-white p-4 text-center dark:border-slate-800 dark:bg-slate-900">
