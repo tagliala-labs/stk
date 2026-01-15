@@ -36,7 +36,7 @@ When working with React components (`.tsx` files) in this project, follow these 
 
 1. **Translation Keys** - Access translations via the `t` variable (e.g., `t.addPhoto`, `t.title`)
 2. **New Text** - Always add both English and Italian translations for new user-facing text
-3. **Translation Object** - Update the `translations` object in `App.tsx`
+3. **Translation Object** - Update the `translations` object (currently in `App.tsx` but may be refactored)
 
 ### Accessibility
 
