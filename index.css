@@ -8,6 +8,16 @@ body {
   font-family: 'Inter', sans-serif;
   margin: 0;
   overflow: hidden;
+  /* iOS safe area support */
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Allow scrolling on mobile */
+@media (max-width: 1024px) {
+  body {
+    overflow: auto;
+  }
 }
 
 input[type='range'] {
