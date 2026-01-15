@@ -55,6 +55,9 @@ const translations = {
     stackList: 'Stack Content',
     theme: 'Theme',
     github: 'View on GitHub',
+    copiedToClipboard: 'Copied to clipboard!',
+    copyFailed: 'Copy failed',
+    longPressToCopy: 'Long press to copy',
   },
   it: {
     title: 'STK.',
@@ -84,6 +87,9 @@ const translations = {
     stackList: 'Contenuto Stack',
     theme: 'Tema',
     github: 'Vedi su GitHub',
+    copiedToClipboard: 'Copiato negli appunti!',
+    copyFailed: 'Copia fallita',
+    longPressToCopy: 'Tieni premuto per copiare',
   },
 };
 
@@ -305,6 +311,10 @@ export default function App() {
   const [showMobileSettings, setShowMobileSettings] = useState(false);
   const [touchStartY, setTouchStartY] = useState<number | null>(null);
   const [touchCurrentY, setTouchCurrentY] = useState<number | null>(null);
+  const [longPressTimer, setLongPressTimer] = useState<NodeJS.Timeout | null>(
+    null
+  );
+  const [copyFeedback, setCopyFeedback] = useState<string | null>(null);
 
   const [settings, setSettings] = useState<Settings>({
     backgroundColor: '#000000',
@@ -414,6 +424,63 @@ export default function App() {
     setDraggedIndex(null);
     setTouchStartY(null);
     setTouchCurrentY(null);
+  };
+
+  // Canvas long-press to copy functionality
+  const copyCanvasToClipboard = async () => {
+    if (!canvasRef.current) return;
+
+    try {
+      const blob = await new Promise<Blob | null>((resolve) => {
+        canvasRef.current?.toBlob((b) => resolve(b), 'image/jpeg', 0.95);
+      });
+
+      if (!blob) {
+        setCopyFeedback(t.copyFailed);
+        setTimeout(() => setCopyFeedback(null), 2000);
+        return;
+      }
+
+      await navigator.clipboard.write([
+        new ClipboardItem({ 'image/jpeg': blob }),
+      ]);
+
+      setCopyFeedback(t.copiedToClipboard);
+      setTimeout(() => setCopyFeedback(null), 2000);
+    } catch (err) {
+      console.error('Failed to copy canvas:', err);
+      setCopyFeedback(t.copyFailed);
+      setTimeout(() => setCopyFeedback(null), 2000);
+    }
+  };
+
+  const handleCanvasLongPressStart = (e: React.TouchEvent) => {
+    if (photos.length === 0) return;
+
+    const timer = setTimeout(() => {
+      copyCanvasToClipboard();
+      // Provide haptic feedback if available
+      if (navigator.vibrate) {
+        navigator.vibrate(50);
+      }
+    }, 500);
+
+    setLongPressTimer(timer);
+  };
+
+  const handleCanvasLongPressEnd = () => {
+    if (longPressTimer) {
+      clearTimeout(longPressTimer);
+      setLongPressTimer(null);
+    }
+  };
+
+  const handleCanvasLongPressMove = () => {
+    // Cancel long press if user moves finger
+    if (longPressTimer) {
+      clearTimeout(longPressTimer);
+      setLongPressTimer(null);
+    }
   };
 
   return (
@@ -637,13 +704,27 @@ export default function App() {
             )}
 
             {photos.length > 0 ? (
-              <div className="relative mb-2 flex flex-1 items-center justify-center overflow-hidden rounded-lg">
+              <div
+                className="relative mb-2 flex flex-1 items-center justify-center overflow-hidden rounded-lg"
+                onTouchStart={handleCanvasLongPressStart}
+                onTouchEnd={handleCanvasLongPressEnd}
+                onTouchMove={handleCanvasLongPressMove}
+                onContextMenu={(e) => e.preventDefault()}
+              >
                 <CanvasPreview
                   photos={photos}
                   settings={settings}
                   onHeightViolation={setIsTooTall}
                   ref={canvasRef}
                 />
+                {/* Copy feedback overlay */}
+                {copyFeedback && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+                    <div className="rounded-2xl bg-white px-6 py-3 text-sm font-bold text-slate-900 shadow-xl dark:bg-slate-800 dark:text-white">
+                      {copyFeedback}
+                    </div>
+                  </div>
+                )}
               </div>
             ) : (
               <div className="mb-2 flex flex-1 flex-col items-center justify-center rounded-lg border border-slate-200 bg-white p-4 text-center dark:border-slate-800 dark:bg-slate-900">
