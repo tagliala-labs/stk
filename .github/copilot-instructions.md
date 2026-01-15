@@ -155,11 +155,23 @@ STK (Creative Stacker) is a React-based web application that allows users to cre
 
 ## Build and Development
 
-- Run dev server: `pnpm run dev` (starts on port 3000)
-- Build for production: `pnpm run build`
-- Preview production build: `pnpm run preview`
-- Install dependencies: `pnpm install`
-- Environment variable: `GEMINI_API_KEY` in `.env.local` (optional, for AI features)
+### Required Before Each Commit
+
+- Run `pnpm run format` to format code with Prettier
+- Run `pnpm run lint` to check code formatting
+
+### Development Flow
+
+- **Install dependencies:** `pnpm install`
+- **Dev server:** `pnpm run dev` (starts on port 3000)
+- **Build for production:** `pnpm run build`
+- **Preview production build:** `pnpm run preview`
+- **Format code:** `pnpm run format`
+- **Check formatting:** `pnpm run lint`
+
+### Environment Variables
+
+- `GEMINI_API_KEY` in `.env.local` (optional, for AI features)
 
 ## File Organization
 
