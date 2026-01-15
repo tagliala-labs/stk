@@ -191,7 +191,7 @@ const ImageUploader: React.FC<{
         processFiles(e.dataTransfer.files);
       }}
       onClick={() => fileInputRef.current?.click()}
-      className={getContainerClasses()}
+      className={`${getContainerClasses()} select-none`}
     >
       <input
         type="file"
@@ -203,19 +203,22 @@ const ImageUploader: React.FC<{
       />
       {compact ? (
         <>
-          <Plus size={14} className="text-slate-600 dark:text-slate-400" />
-          <span className="text-[10px] font-bold text-slate-600 dark:text-slate-400">
+          <Plus
+            size={14}
+            className="text-slate-600 select-none dark:text-slate-400"
+          />
+          <span className="text-[10px] font-bold text-slate-600 select-none dark:text-slate-400">
             {t.addPhoto}
           </span>
         </>
       ) : (
         <>
           <div
-            className={`mb-2 flex h-10 w-10 items-center justify-center rounded-2xl transition-transform group-hover:scale-110 ${isDragging ? 'bg-indigo-500 text-white' : 'bg-slate-100 text-slate-400 group-hover:bg-indigo-100 group-hover:text-indigo-500 dark:bg-slate-800 dark:group-hover:bg-indigo-900/50'}`}
+            className={`mb-2 flex h-10 w-10 items-center justify-center rounded-2xl transition-transform select-none group-hover:scale-110 ${isDragging ? 'bg-indigo-500 text-white' : 'bg-slate-100 text-slate-400 group-hover:bg-indigo-100 group-hover:text-indigo-500 dark:bg-slate-800 dark:group-hover:bg-indigo-900/50'}`}
           >
             <Plus size={20} />
           </div>
-          <p className="text-[11px] font-bold text-slate-700 dark:text-slate-300">
+          <p className="text-[11px] font-bold text-slate-700 select-none dark:text-slate-300">
             {t.addPhoto}
           </p>
         </>
@@ -289,7 +292,7 @@ const CanvasPreview = forwardRef<
   }, [photos, settings, onHeightViolation]);
 
   return (
-    <div className="relative h-full overflow-hidden rounded-sm border-4 border-indigo-400/80 bg-black dark:border-indigo-600/80">
+    <div className="relative h-full overflow-hidden rounded-sm border-4 border-indigo-400/80 bg-black select-none dark:border-indigo-600/80">
       <canvas ref={canvasRef} className="block h-full w-full object-contain" />
     </div>
   );
@@ -484,17 +487,17 @@ export default function App() {
   };
 
   return (
-    <div className="flex flex-1 flex-col overflow-auto bg-[#fafafa] transition-colors duration-200 lg:h-screen lg:flex-row lg:overflow-hidden dark:bg-slate-950 h-full">
+    <div className="flex h-full flex-1 flex-col overflow-auto bg-[#fafafa] transition-colors duration-200 select-none lg:h-screen lg:flex-row lg:overflow-hidden dark:bg-slate-950">
       {/* COLUMN 1: Settings */}
       <aside className="flex w-full flex-col overflow-hidden border-b border-slate-200 bg-white shadow-sm transition-colors duration-200 lg:w-72 lg:border-r lg:border-b-0 dark:border-slate-800 dark:bg-slate-900">
         <div className="p-4 pb-2 lg:p-6 lg:pb-2">
           <div className="mb-3 flex items-start justify-between lg:mb-4">
             <div>
-              <h1 className="text-2xl leading-none font-black tracking-tighter text-slate-900 italic lg:text-3xl dark:text-white">
+              <h1 className="text-2xl leading-none font-black tracking-tighter text-slate-900 italic select-none lg:text-3xl dark:text-white">
                 {t.title}
                 <span className="text-indigo-600">.</span>
               </h1>
-              <p className="mt-1 text-[10px] font-bold tracking-[0.2em] text-slate-400 uppercase dark:text-slate-500">
+              <p className="mt-1 text-[10px] font-bold tracking-[0.2em] text-slate-400 uppercase select-none dark:text-slate-500">
                 {t.subtitle}
               </p>
             </div>
@@ -504,19 +507,19 @@ export default function App() {
                 target="_blank"
                 rel="noopener noreferrer"
                 title={t.github}
-                className="rounded-full border border-slate-200 bg-slate-50 p-2 text-slate-500 transition-colors hover:text-indigo-600 dark:border-slate-700 dark:bg-slate-800"
+                className="rounded-full border border-slate-200 bg-slate-50 p-2 text-slate-500 transition-colors select-none hover:text-indigo-600 dark:border-slate-700 dark:bg-slate-800"
               >
                 <Github size={12} />
               </a>
               <button
                 onClick={toggleTheme}
-                className="rounded-full border border-slate-200 bg-slate-50 p-2 text-slate-500 transition-colors hover:text-indigo-600 dark:border-slate-700 dark:bg-slate-800"
+                className="rounded-full border border-slate-200 bg-slate-50 p-2 text-slate-500 transition-colors select-none hover:text-indigo-600 dark:border-slate-700 dark:bg-slate-800"
               >
                 {isDark ? <Sun size={12} /> : <Moon size={12} />}
               </button>
               <button
                 onClick={toggleLang}
-                className="rounded-full border border-slate-200 bg-slate-50 px-2 py-1 text-[10px] font-black text-slate-500 hover:text-indigo-600 dark:border-slate-700 dark:bg-slate-800"
+                className="rounded-full border border-slate-200 bg-slate-50 px-2 py-1 text-[10px] font-black text-slate-500 select-none hover:text-indigo-600 dark:border-slate-700 dark:bg-slate-800"
               >
                 {t.lang}
               </button>
@@ -541,7 +544,7 @@ export default function App() {
             </div>
             <button
               onClick={() => setShowMobileSettings(!showMobileSettings)}
-              className="flex items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-[10px] font-bold text-slate-600 transition-colors hover:border-indigo-300 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400"
+              className="flex items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-[10px] font-bold text-slate-600 transition-colors select-none hover:border-indigo-300 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400"
             >
               <SettingsIcon size={14} />
               <span>{t.options}</span>
@@ -561,14 +564,14 @@ export default function App() {
           <div className="space-y-4">
             <div className="flex items-center gap-2 border-b border-slate-100 pb-1 text-slate-400 dark:border-slate-800 dark:text-slate-600">
               <SettingsIcon size={12} />
-              <h2 className="text-[10px] font-bold tracking-widest uppercase">
+              <h2 className="text-[10px] font-bold tracking-widest uppercase select-none">
                 {t.options}
               </h2>
             </div>
 
             <div className="space-y-4">
               <div className="space-y-2">
-                <label className="text-[10px] font-black tracking-wider text-slate-400 uppercase dark:text-slate-500">
+                <label className="text-[10px] font-black tracking-wider text-slate-400 uppercase select-none dark:text-slate-500">
                   {t.format}
                 </label>
                 <div className="grid grid-cols-3 gap-1.5">
@@ -577,7 +580,7 @@ export default function App() {
                       <button
                         key={f}
                         onClick={() => setSettings({ ...settings, format: f })}
-                        className={`rounded-xl border py-2 text-[10px] font-black transition-all ${
+                        className={`rounded-xl border py-2 text-[10px] font-black transition-all select-none ${
                           settings.format === f
                             ? 'border-indigo-600 bg-indigo-600 text-white shadow-md'
                             : 'border-slate-200 bg-white text-slate-600 hover:border-indigo-200 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-400 dark:hover:border-indigo-500'
@@ -591,7 +594,7 @@ export default function App() {
               </div>
 
               <div className="space-y-2">
-                <label className="text-[10px] font-black tracking-wider text-slate-400 uppercase dark:text-slate-500">
+                <label className="text-[10px] font-black tracking-wider text-slate-400 uppercase select-none dark:text-slate-500">
                   {t.bgColor}
                 </label>
                 <div className="flex items-center gap-2">
@@ -615,7 +618,7 @@ export default function App() {
                         onClick={() =>
                           setSettings({ ...settings, backgroundColor: c })
                         }
-                        className={`h-4 w-4 rounded-full border border-slate-200 transition-transform dark:border-slate-700 ${settings.backgroundColor === c ? 'ring-2 ring-indigo-500 ring-offset-2' : ''}`}
+                        className={`h-4 w-4 rounded-full border border-slate-200 transition-transform select-none dark:border-slate-700 ${settings.backgroundColor === c ? 'ring-2 ring-indigo-500 ring-offset-2' : ''}`}
                         style={{ backgroundColor: c }}
                       />
                     ))}
@@ -624,7 +627,7 @@ export default function App() {
               </div>
 
               <div className="space-y-2">
-                <div className="flex justify-between text-[10px] font-black text-slate-400 uppercase dark:text-slate-500">
+                <div className="flex justify-between text-[10px] font-black text-slate-400 uppercase select-none dark:text-slate-500">
                   <span>{t.spacing}</span>
                   <span className="font-mono font-bold text-indigo-600">
                     {settings.spacing}px
@@ -646,7 +649,7 @@ export default function App() {
               </div>
 
               <div className="space-y-2">
-                <div className="flex justify-between text-[10px] font-black text-slate-400 uppercase dark:text-slate-500">
+                <div className="flex justify-between text-[10px] font-black text-slate-400 uppercase select-none dark:text-slate-500">
                   <span>{t.padding}</span>
                   <span className="font-mono font-bold text-indigo-600">
                     {settings.padding}px
@@ -673,14 +676,14 @@ export default function App() {
         {/* Desktop Export Button - Hidden on Mobile */}
         <div className="hidden border-t border-slate-100 bg-slate-50/50 p-4 lg:block lg:p-6 dark:border-slate-800 dark:bg-slate-900/50">
           {isTooTall && photos.length > 0 && (
-            <div className="mb-3 flex items-center gap-2 rounded-xl bg-amber-50 px-3 py-2 text-[10px] font-bold text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">
+            <div className="mb-3 flex items-center gap-2 rounded-xl bg-amber-50 px-3 py-2 text-[10px] font-bold text-amber-700 select-none dark:bg-amber-900/30 dark:text-amber-400">
               <AlertCircle size={12} /> {t.warningCrop}
             </div>
           )}
           <button
             onClick={handleExport}
             disabled={photos.length === 0}
-            className={`flex w-full items-center justify-center gap-3 rounded-3xl py-4 text-xs font-black transition-all active:scale-95 ${
+            className={`flex w-full items-center justify-center gap-3 rounded-3xl py-4 text-xs font-black transition-all select-none active:scale-95 ${
               photos.length === 0
                 ? 'cursor-not-allowed border border-slate-300 bg-slate-200 text-slate-400 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-600'
                 : 'bg-indigo-600 text-white shadow-xl shadow-indigo-100 hover:bg-indigo-700 dark:shadow-none'
@@ -694,11 +697,11 @@ export default function App() {
       {/* MOBILE: Combined Canvas and Photo List - Desktop: Canvas Only */}
       <main className="relative flex flex-1 flex-col overflow-auto bg-[#f0f2f5] transition-colors duration-200 lg:flex-row lg:items-center lg:justify-center lg:overflow-hidden lg:p-6 dark:bg-slate-950">
         {/* Mobile Two Column Layout - min-height accounts for header (~180px) */}
-        <div className="flex flex-row flex-1 gap-2 p-2 lg:hidden">
+        <div className="flex flex-1 flex-row gap-2 p-2 lg:hidden">
           {/* Left Column: Canvas + Export */}
           <div className="flex flex-1 flex-col">
             {isTooTall && (
-              <div className="mb-2 flex items-center gap-1.5 rounded-xl bg-red-600 px-2 py-1.5 text-[8px] font-black text-white shadow-lg">
+              <div className="mb-2 flex items-center gap-1.5 rounded-xl bg-red-600 px-2 py-1.5 text-[8px] font-black text-white shadow-lg select-none">
                 <AlertCircle size={10} /> {t.warningCrop}
               </div>
             )}
@@ -720,7 +723,7 @@ export default function App() {
                 {/* Copy feedback overlay */}
                 {copyFeedback && (
                   <div className="absolute inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-                    <div className="rounded-2xl bg-white px-6 py-3 text-sm font-bold text-slate-900 shadow-xl dark:bg-slate-800 dark:text-white">
+                    <div className="rounded-2xl bg-white px-6 py-3 text-sm font-bold text-slate-900 shadow-xl select-none dark:bg-slate-800 dark:text-white">
                       {copyFeedback}
                     </div>
                   </div>
@@ -728,13 +731,13 @@ export default function App() {
               </div>
             ) : (
               <div className="mb-2 flex flex-1 flex-col items-center justify-center rounded-lg border border-slate-200 bg-white p-4 text-center dark:border-slate-800 dark:bg-slate-900">
-                <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-2xl border border-slate-100 bg-slate-50 text-slate-200 dark:border-slate-800 dark:bg-slate-800 dark:text-slate-700">
+                <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-2xl border border-slate-100 bg-slate-50 text-slate-200 select-none dark:border-slate-800 dark:bg-slate-800 dark:text-slate-700">
                   <Layout size={24} />
                 </div>
-                <h3 className="text-xs font-black text-slate-800 dark:text-slate-200">
+                <h3 className="text-xs font-black text-slate-800 select-none dark:text-slate-200">
                   {t.emptyTitle}
                 </h3>
-                <p className="mt-1 text-[9px] leading-relaxed text-slate-400 dark:text-slate-500">
+                <p className="mt-1 text-[9px] leading-relaxed text-slate-400 select-none dark:text-slate-500">
                   {t.emptyDesc}
                 </p>
               </div>
@@ -743,7 +746,7 @@ export default function App() {
             <button
               onClick={handleExport}
               disabled={photos.length === 0}
-              className={`flex w-full items-center justify-center gap-2 rounded-2xl py-3 text-[10px] font-black transition-all active:scale-95 ${
+              className={`flex w-full items-center justify-center gap-2 rounded-2xl py-3 text-[10px] font-black transition-all select-none active:scale-95 ${
                 photos.length === 0
                   ? 'cursor-not-allowed border border-slate-300 bg-slate-200 text-slate-400 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-600'
                   : 'bg-indigo-600 text-white shadow-lg hover:bg-indigo-700'
@@ -777,10 +780,10 @@ export default function App() {
                     <div className="relative aspect-square overflow-hidden rounded-lg bg-slate-100 dark:bg-slate-800">
                       <img
                         src={p.preview}
-                        className="h-full w-full object-cover"
+                        className="h-full w-full object-cover select-none"
                         alt={`Photo ${idx + 1}`}
                       />
-                      <div className="absolute top-0 left-0 rounded-br-md bg-indigo-600 px-1 py-0.5 text-[8px] font-black text-white">
+                      <div className="absolute top-0 left-0 rounded-br-md bg-indigo-600 px-1 py-0.5 text-[8px] font-black text-white select-none">
                         {idx + 1}
                       </div>
                       <div className="absolute inset-0 flex items-center justify-center bg-slate-900/0 transition-colors group-hover:bg-slate-900/50">
@@ -792,7 +795,7 @@ export default function App() {
                     </div>
                     <button
                       onClick={() => removePhoto(p.id)}
-                      className="absolute -top-1 -right-1 rounded-full bg-red-500 p-0.5 text-white opacity-0 shadow-md transition-opacity group-hover:opacity-100 hover:bg-red-600"
+                      className="absolute -top-1 -right-1 rounded-full bg-red-500 p-0.5 text-white opacity-0 shadow-md transition-opacity select-none group-hover:opacity-100 hover:bg-red-600"
                     >
                       <Trash2 size={10} />
                     </button>
@@ -801,7 +804,7 @@ export default function App() {
                 {photos.length > 1 && (
                   <button
                     onClick={reverseOrder}
-                    className="mt-1 flex items-center justify-center gap-1 rounded-lg bg-slate-100 py-2 text-[8px] font-black text-indigo-600 transition-colors hover:bg-indigo-50 dark:bg-slate-800 dark:hover:bg-indigo-900/30"
+                    className="mt-1 flex items-center justify-center gap-1 rounded-lg bg-slate-100 py-2 text-[8px] font-black text-indigo-600 transition-colors select-none hover:bg-indigo-50 dark:bg-slate-800 dark:hover:bg-indigo-900/30"
                   >
                     <ArrowUpDown size={10} />
                   </button>
@@ -809,7 +812,7 @@ export default function App() {
               </>
             ) : (
               <div className="flex h-full items-center justify-center">
-                <p className="text-center text-[8px] font-bold text-slate-400 dark:text-slate-600">
+                <p className="text-center text-[8px] font-bold text-slate-400 select-none dark:text-slate-600">
                   {t.stackList}
                 </p>
               </div>
@@ -820,7 +823,7 @@ export default function App() {
         {/* Desktop Canvas View */}
         <div className="hidden lg:flex lg:h-full lg:w-full lg:items-center lg:justify-center">
           {isTooTall && (
-            <div className="absolute top-6 z-10 flex animate-pulse items-center gap-3 rounded-full bg-red-600 px-6 py-2.5 text-[10px] font-black text-white shadow-2xl">
+            <div className="absolute top-6 z-10 flex animate-pulse items-center gap-3 rounded-full bg-red-600 px-6 py-2.5 text-[10px] font-black text-white shadow-2xl select-none">
               <AlertCircle size={14} /> {t.warningHeight}{' '}
               {FORMATS[settings.format].height}px!
             </div>
@@ -837,19 +840,19 @@ export default function App() {
             </div>
           ) : (
             <div className="max-w-sm text-center">
-              <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-[2.5rem] border border-slate-100 bg-white text-slate-200 shadow-sm dark:border-slate-800 dark:bg-slate-900 dark:text-slate-800">
+              <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-[2.5rem] border border-slate-100 bg-white text-slate-200 shadow-sm select-none dark:border-slate-800 dark:bg-slate-900 dark:text-slate-800">
                 <Layout size={40} />
               </div>
-              <h3 className="text-lg font-black tracking-tight text-slate-800 dark:text-slate-200">
+              <h3 className="text-lg font-black tracking-tight text-slate-800 select-none dark:text-slate-200">
                 {t.emptyTitle}
               </h3>
-              <p className="mt-2 text-xs leading-relaxed text-slate-400 dark:text-slate-500">
+              <p className="mt-2 text-xs leading-relaxed text-slate-400 select-none dark:text-slate-500">
                 {t.emptyDesc}
               </p>
             </div>
           )}
 
-          <div className="absolute bottom-6 flex gap-6 text-[10px] font-black tracking-[0.3em] text-slate-400 uppercase dark:text-slate-600">
+          <div className="absolute bottom-6 flex gap-6 text-[10px] font-black tracking-[0.3em] text-slate-400 uppercase select-none dark:text-slate-600">
             <span>{FORMATS[settings.format].label}</span>
             <span className="opacity-20">•</span>
             <span>
@@ -868,14 +871,14 @@ export default function App() {
               size={14}
               className="text-slate-400 dark:text-slate-600"
             />
-            <h3 className="text-[10px] font-black tracking-widest text-slate-900 uppercase dark:text-slate-200">
+            <h3 className="text-[10px] font-black tracking-widest text-slate-900 uppercase select-none dark:text-slate-200">
               {t.stackList} ({photos.length})
             </h3>
           </div>
           {photos.length > 1 && (
             <button
               onClick={reverseOrder}
-              className="flex items-center gap-1.5 text-[10px] font-black text-indigo-600 uppercase hover:text-indigo-700"
+              className="flex items-center gap-1.5 text-[10px] font-black text-indigo-600 uppercase select-none hover:text-indigo-700"
             >
               <ArrowUpDown size={12} />
               {t.reverse}
@@ -906,14 +909,17 @@ export default function App() {
               </div>
 
               <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-xl border border-slate-100 bg-slate-100 shadow-inner dark:border-slate-700 dark:bg-slate-900">
-                <img src={p.preview} className="h-full w-full object-cover" />
-                <div className="absolute top-0 left-0 rounded-br-lg bg-indigo-600 px-1.5 py-0.5 text-[8px] font-black text-white">
+                <img
+                  src={p.preview}
+                  className="h-full w-full object-cover select-none"
+                />
+                <div className="absolute top-0 left-0 rounded-br-lg bg-indigo-600 px-1.5 py-0.5 text-[8px] font-black text-white select-none">
                   {idx + 1}
                 </div>
               </div>
 
               <div className="min-w-0 flex-1">
-                <p className="truncate font-mono text-[10px] font-bold text-slate-400 dark:text-slate-500">
+                <p className="truncate font-mono text-[10px] font-bold text-slate-400 select-none dark:text-slate-500">
                   {p.width}×{p.height}
                 </p>
               </div>
@@ -922,20 +928,20 @@ export default function App() {
                 <button
                   onClick={() => moveUp(idx)}
                   disabled={idx === 0}
-                  className={`rounded-md p-1 ${idx === 0 ? 'text-slate-100 dark:text-slate-800' : 'text-slate-400 hover:bg-slate-50 hover:text-indigo-600 dark:text-slate-500 dark:hover:bg-slate-700'}`}
+                  className={`rounded-md p-1 select-none ${idx === 0 ? 'text-slate-100 dark:text-slate-800' : 'text-slate-400 hover:bg-slate-50 hover:text-indigo-600 dark:text-slate-500 dark:hover:bg-slate-700'}`}
                 >
                   <ArrowUp size={14} />
                 </button>
                 <button
                   onClick={() => moveDown(idx)}
                   disabled={idx === photos.length - 1}
-                  className={`rounded-md p-1 ${idx === photos.length - 1 ? 'text-slate-100 dark:text-slate-800' : 'text-slate-400 hover:bg-slate-50 hover:text-indigo-600 dark:text-slate-500 dark:hover:bg-slate-700'}`}
+                  className={`rounded-md p-1 select-none ${idx === photos.length - 1 ? 'text-slate-100 dark:text-slate-800' : 'text-slate-400 hover:bg-slate-50 hover:text-indigo-600 dark:text-slate-500 dark:hover:bg-slate-700'}`}
                 >
                   <ArrowDown size={14} />
                 </button>
                 <button
                   onClick={() => removePhoto(p.id)}
-                  className="rounded-md p-1 text-slate-400 hover:bg-red-50 hover:text-red-500 dark:text-slate-500 dark:hover:bg-red-900/30"
+                  className="rounded-md p-1 text-slate-400 select-none hover:bg-red-50 hover:text-red-500 dark:text-slate-500 dark:hover:bg-red-900/30"
                 >
                   <Trash2 size={14} />
                 </button>
@@ -948,7 +954,7 @@ export default function App() {
           <div className="border-t border-slate-100 p-4 dark:border-slate-800">
             <button
               onClick={() => setPhotos([])}
-              className="w-full rounded-xl py-2 text-[10px] font-black tracking-widest text-red-400 uppercase transition-colors hover:bg-red-50/50 hover:text-red-600 dark:text-red-500 dark:hover:bg-red-900/20"
+              className="w-full rounded-xl py-2 text-[10px] font-black tracking-widest text-red-400 uppercase transition-colors select-none hover:bg-red-50/50 hover:text-red-600 dark:text-red-500 dark:hover:bg-red-900/20"
             >
               {t.clear}
             </button>
