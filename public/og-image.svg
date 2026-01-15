@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e293b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0f172a;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4f46e5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGrad)"/>
+  
+  <!-- Decorative elements -->
+  <circle cx="100" cy="100" r="150" fill="#4f46e5" opacity="0.1"/>
+  <circle cx="1100" cy="530" r="200" fill="#7c3aed" opacity="0.1"/>
+  
+  <!-- Logo icon -->
+  <rect x="450" y="150" width="140" height="140" rx="28" fill="url(#logoGrad)"/>
+  <text x="520" y="255" font-family="Arial, sans-serif" font-size="100" font-weight="bold" fill="white" text-anchor="middle">S</text>
+  
+  <!-- Title -->
+  <text x="600" y="370" font-family="Arial, sans-serif" font-size="72" font-weight="bold" fill="white" text-anchor="middle">STK.</text>
+  
+  <!-- Subtitle -->
+  <text x="600" y="430" font-family="Arial, sans-serif" font-size="32" fill="#94a3b8" text-anchor="middle">Multi-Format Image Stacker</text>
+  
+  <!-- Description -->
+  <text x="600" y="490" font-family="Arial, sans-serif" font-size="24" fill="#64748b" text-anchor="middle">Create vertical image stacks with customizable layouts</text>
+</svg>
