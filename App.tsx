@@ -816,7 +816,7 @@ export default function App() {
               onTouchEnd={handleTouchEnd}
               className={`draggable-item group flex cursor-grab items-center gap-3 rounded-2xl border bg-white p-2.5 active:cursor-grabbing dark:bg-slate-800 ${
                 draggedIndex === idx
-                  ? 'dragging-active border-indigo-500 shadow-none'
+                  ? 'dragging-active border-indigo-500'
                   : 'border-slate-200 shadow-sm transition-all hover:border-indigo-300 dark:border-slate-700 dark:hover:border-indigo-500'
               }`}
             >
