@@ -432,7 +432,7 @@ export default function App() {
 
     try {
       const blob = await new Promise<Blob | null>((resolve) => {
-        canvasRef.current?.toBlob((b) => resolve(b), 'image/jpeg', 0.95);
+        canvasRef.current?.toBlob((b) => resolve(b), 'image/png');
       });
 
       if (!blob) {
@@ -442,7 +442,7 @@ export default function App() {
       }
 
       await navigator.clipboard.write([
-        new ClipboardItem({ 'image/jpeg': blob }),
+        new ClipboardItem({ 'image/png': blob }),
       ]);
 
       setCopyFeedback(t.copiedToClipboard);
