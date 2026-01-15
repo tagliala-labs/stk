@@ -8,9 +8,6 @@ body {
   font-family: 'Inter', sans-serif;
   margin: 0;
   overflow: hidden;
-  /* iOS safe area support - max(0, ...) prevents issues on non-notch devices */
-  padding-top: max(0px, env(safe-area-inset-top));
-  padding-bottom: max(0px, env(safe-area-inset-bottom));
 }
 
 /* Allow scrolling on mobile */
@@ -18,16 +15,6 @@ body {
   body {
     overflow: auto;
   }
-}
-
-/* iOS safe area padding for mobile header */
-.safe-area-top {
-  padding-top: max(1rem, env(safe-area-inset-top));
-}
-
-/* iOS safe area padding for mobile content bottom */
-.safe-area-bottom {
-  padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
 }
 
 input[type='range'] {
