@@ -52,12 +52,6 @@ When working with React components (`.tsx` files) in this project, follow these 
 2. **Drag and Drop** - Use `e.preventDefault()` in drag event handlers
 3. **State Updates** - Use functional state updates when new state depends on previous state
 
-### Performance
-
-1. **Cleanup Functions** - Use `useEffect` cleanup functions to prevent memory leaks
-2. **Ref Values** - Use `useRef` for values that don't need to trigger re-renders
-3. **State Locality** - Keep state as close to where it's used as possible
-
 ### File Processing
 
 1. **FileReader API** - Use `FileReader` API for reading image files
